@@ -4,7 +4,8 @@ import "gorm.io/gorm"
 
 type Admin struct {
 	gorm.Model
-	name     string
-	password string
-	Manager  Manager
+	Name      string `gorm:"not null"`
+	Password  string `gorm:"not null"`
+	ManagerID uint
+	Manager   Manager
 }

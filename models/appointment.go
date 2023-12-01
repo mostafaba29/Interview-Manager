@@ -8,8 +8,10 @@ import (
 
 type Appointment struct {
 	gorm.Model
-	meetTime time.Time
-	Admin    Admin
-	Manager  Manager
-	reason   string
+	MeetingTime time.Time `gorm:"not null"`
+	AdminID     uint
+	ManagerID   uint
+	Admin       Admin
+	Manager     Manager
+	Purpose     string
 }
