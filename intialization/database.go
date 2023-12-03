@@ -1,9 +1,7 @@
 package intialization
 
 import (
-	"os"
-
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -11,8 +9,7 @@ var DB *gorm.DB
 
 func ConnectToDB() {
 	var err error
-	dsn := os.Getenv("DSN")
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(sqlite.Open("mydb.db"), &gorm.Config{})
 	if err != nil {
 		panic("can't connect to database")
 	}

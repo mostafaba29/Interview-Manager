@@ -2,7 +2,7 @@ package intialization
 
 import "mostafaba29/models"
 
-func Migrate() {
+func MigrateDB() {
 
-	DB.AutoMigrate(&models.Admin{}, &models.Appointment{}, &models.AppointmentDetails{}, &models.Client{}, &models.Manager{}, &models.Notification{})
+	DB.AutoMigrate(&models.Manager{}, &models.Admin{}, &models.Appointment{}, &models.AppointmentDetails{}, &models.Client{}, &models.Notification{})
 }

@@ -1,14 +1,14 @@
 package routes
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+)
 
 func SetupRoutes(app *fiber.App) {
 
-	app.Get("/home", home)
-
-}
-
-func home(c *fiber.Ctx) error {
-	return c.SendString("de7k")
+	//app.Use("/login", middleware.Authenticate, handlers.Login)
+	// app.Post("/signup", handlers.Signup)
+	// app.Post("/login", handlers.Login)
+	// app.Post("/logout", handlers.Logout)
 
 }
