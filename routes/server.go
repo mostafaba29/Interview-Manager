@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
+	"github.com/mattn/go-sqlite3"
 )
 
 var (
@@ -17,10 +18,18 @@ var (
 func Setup() {
 	app := fiber.New()
 	SetupRoutes(app)
-	Store = session.New(session.Config{
+
+	storage := sqlite3.New()
+	store := session.New(session.Config{
+		Storage: storage,
+	})
+
+	app.Use(session.New(session.Config{
+		KeyLookup:      "header:Authorization",
+		Storage:        store,
+		CookieName:     "auth",
 		CookieHTTPOnly: true,
 		Expiration:     time.Hour * 24 * 30,
-	})
-	//app.Use(middleware.AuthMiddleware())
+	}))
 	log.Fatal(app.Listen(":8000"))
 }

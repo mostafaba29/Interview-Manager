@@ -9,9 +9,7 @@ import (
 type Appointment struct {
 	gorm.Model
 	MeetingTime time.Time `gorm:"not null"`
-	AdminID     uint
+	UserID      uint
 	ManagerID   uint
-	Admin       Admin
-	Manager     Manager
-	Purpose     string
+	Description string
 }

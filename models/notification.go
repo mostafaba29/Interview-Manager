@@ -7,6 +7,6 @@ type Notification struct {
 	Text                 string
 	AppointmentDetailsID uint
 	AppointmentDetails   AppointmentDetails
-	ManagerID            uint
-	Manager              Manager
+	UserID               uint
+	User                 User
 }

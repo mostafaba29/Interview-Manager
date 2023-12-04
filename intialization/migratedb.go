@@ -4,5 +4,5 @@ import "mostafaba29/models"
 
 func MigrateDB() {
 
-	DB.AutoMigrate(&models.Manager{}, &models.Admin{}, &models.Appointment{}, &models.AppointmentDetails{}, &models.Client{}, &models.Notification{})
+	DB.AutoMigrate(&models.User{}, &models.Appointment{}, &models.AppointmentDetails{}, &models.Client{}, &models.Notification{}, models.Session{})
 }
