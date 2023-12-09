@@ -6,12 +6,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func AuthMiddleware() fiber.Handler {
+func AuthMiddleware(role string) fiber.Handler {
 	return Authenticate
 }
 
 func Authenticate(c *fiber.Ctx) error {
-	session, err := Store.Get(c)
+	session := session.Get(c)
 	if strings.Split(c.Path(), "/")[1] == "login" {
 		return c.Next()
 	}

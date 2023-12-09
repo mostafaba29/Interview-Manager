@@ -10,7 +10,11 @@ import (
 )
 
 func Signup(c *fiber.Ctx) error {
-	var userData models.User
+	var userData struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+		Position string `json:"position"`
+	}
 	if err := c.BodyParser(&userData); err != nil {
 		return c.Status(400).JSON(err.Error())
 
@@ -48,7 +52,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	var user models.User
-	intialization.DB.Where("username=?", userInfo.Username).First(&userInfo)
+	intialization.DB.Where("username=? AND password = ?", userInfo.Username, userInfo.Password).First(&userInfo)
 
 	if user.ID == 0 {
 		return c.Status(400).JSON(fiber.Map{
@@ -62,11 +66,18 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
+	session := store.Start(c)
+	session.Set("userID", user.ID)
+	session.Set("position", user.Position)
+	session.Save()
+
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"massege": "logged in",
 	})
 }
 
 func Logout(c *fiber.Ctx) error {
-
+	session := store.Start(c)
+	session.Destroy()
+	return c.SendStatus(fiber.StatusOK)
 }

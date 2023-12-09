@@ -12,4 +12,7 @@ type Appointment struct {
 	UserID      uint
 	ManagerID   uint
 	Description string
+	Status      string
+	Client      string
+	Purpose     string
 }
