@@ -8,12 +8,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func CreateAppointment(c *fiber.Ctx) {
+func CreateAppointment(c *fiber.Ctx) error {
 
 	var appointmentDetails models.Appointment
 	if err := c.BodyParser(&appointmentDetails); err != nil {
 		c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"error": "could't read appointment details",
+			"error": "could not read appointment details",
 		})
 
 	}
@@ -33,10 +33,22 @@ func CreateAppointment(c *fiber.Ctx) {
 		})
 	}
 
-	c.JSON(fiber.Map{
+	return c.JSON(fiber.Map{
 		"massege": "appointment created",
 	})
 
+}
+
+func Approve(c *fiber.Ctx) error {
+	var appointment models.Appointment
+	result := intialization.DB.First(&appointment, c.Params("id"))
+	if result.Error != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "Appointment not found"})
+	}
+
+	intialization.DB.Model(&models.Appointment{}).Where("id = ?", c.Params("id")).Update("status", "approved")
+
+	return c.JSON(appointment)
 }
 
 func CancelAppointment(c *fiber.Ctx) error {
@@ -47,11 +59,8 @@ func CancelAppointment(c *fiber.Ctx) error {
 			"error": "appointment not found",
 		})
 	}
-	canceledAppointment.Status = "canceled"
-	intialization.DB.Save(&canceledAppointment)
-	return c.JSON(fiber.Map{
-		"massege": "appointment canceled",
-	})
+	intialization.DB.Model(&models.Appointment{}).Where("id = ?", c.Params("id")).Update("status", "declined")
+	return c.JSON(canceledAppointment)
 }
 
 func UpdateAppointment(c *fiber.Ctx) error {

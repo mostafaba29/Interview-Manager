@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"mostafaba29/intialization"
+	"mostafaba29/middleware"
 	"mostafaba29/models"
 	"net/http"
 
@@ -66,10 +67,20 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	session := store.Start(c)
-	session.Set("userID", user.ID)
-	session.Set("position", user.Position)
-	session.Save()
+	session, err := middleware.Store.Get(c)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "something went wrong" + err.Error(),
+		})
+	}
+	session.Set(middleware.USER_ID, user.ID)
+	session.Set(middleware.AUTH_KEY, true)
+	sessERR := session.Save()
+	if sessERR != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "something went wrong" + err.Error(),
+		})
+	}
 
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"massege": "logged in",
@@ -77,7 +88,19 @@ func Login(c *fiber.Ctx) error {
 }
 
 func Logout(c *fiber.Ctx) error {
-	session := store.Start(c)
-	session.Destroy()
-	return c.SendStatus(fiber.StatusOK)
+	session, err := middleware.Store.Get(c)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "no session",
+		})
+	}
+	sessERR := session.Destroy()
+	if sessERR != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "something is wrong" + err.Error(),
+		})
+	}
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"massege": "logged out",
+	})
 }

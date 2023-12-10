@@ -2,16 +2,22 @@ package routes
 
 import (
 	"mostafaba29/handlers"
-	"mostafaba29/middleware"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func SetupRoutes(app *fiber.App) {
 
-	app.Use("/login", middleware.Authenticate, handlers.Login)
-	app.Post("/signup", handlers.Signup)
-	app.Post("/login", handlers.Login)
-	app.Post("/logout", handlers.Logout)
+	app.Post("/auth/signup", handlers.Signup)
+	app.Post("/auth/login", handlers.Login)
+	app.Post("/auth/logout", handlers.Logout)
+	app.Post("/create", handlers.CreateAppointment)
+	app.Post("approve", handlers.Approve)
+	app.Post("/decline", handlers.CancelAppointment)
+	app.Post("/update", handlers.UpdateAppointment)
+	app.Get("allappointments", handlers.ShowAppointments)
+	app.Get("/showapporved", handlers.ShowApprovedAppointments)
+	app.Get("/showdeclined", handlers.ShowCanceledAppointments)
+	app.Get("showbyclient", handlers.ShowClient)
 
 }

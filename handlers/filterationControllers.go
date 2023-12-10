@@ -13,7 +13,7 @@ func ShowAppointments(c *fiber.Ctx) error {
 	return c.JSON(appointments)
 }
 
-func ApprovedAppointments(c *fiber.Ctx) error {
+func ShowApprovedAppointments(c *fiber.Ctx) error {
 	var approvedAppointments []models.Appointment
 	if err := intialization.DB.Where("status=?", "approved").First(&approvedAppointments); err != nil {
 		return c.Status(400).JSON(fiber.Map{
@@ -23,7 +23,7 @@ func ApprovedAppointments(c *fiber.Ctx) error {
 	return c.JSON(approvedAppointments)
 }
 
-func CanceledAppointments(c *fiber.Ctx) error {
+func ShowCanceledAppointments(c *fiber.Ctx) error {
 	var canceledAppointments []models.Appointment
 	if err := intialization.DB.Where("status=?", "canceled").First(&canceledAppointments); err != nil {
 		return c.Status(400).JSON(fiber.Map{

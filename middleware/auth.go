@@ -6,27 +6,24 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func AuthMiddleware(role string) fiber.Handler {
-	return Authenticate
+func NewMiddleware() fiber.Handler {
+	return AuthMiddleware
 }
-
-func Authenticate(c *fiber.Ctx) error {
-	session := session.Get(c)
-	if strings.Split(c.Path(), "/")[1] == "login" {
+func AuthMiddleware(c *fiber.Ctx) error {
+	session, err := Store.Get(c)
+	if strings.Split(c.Path(), "/")[1] == "auth" {
 		return c.Next()
 	}
-
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"message": "Not Autherized",
+			"massege": "unautherized",
 		})
 	}
 
 	if session.Get(AUTH_KEY) == nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"message": "Not Autherized",
+			"massege": "unautherized to proceed",
 		})
 	}
-
 	return c.Next()
 }
