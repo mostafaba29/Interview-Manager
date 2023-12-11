@@ -4,7 +4,6 @@ go 1.21.3
 
 require (
 	github.com/gofiber/fiber/v2 v2.51.0
-	github.com/joho/godotenv v1.5.1
 	golang.org/x/crypto v0.14.0
 	gorm.io/driver/sqlite v1.5.4
 	gorm.io/gorm v1.25.5
