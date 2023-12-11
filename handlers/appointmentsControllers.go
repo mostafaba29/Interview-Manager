@@ -33,7 +33,8 @@ func CreateAppointment(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{
-		"massege": "appointment created",
+		"massege":     "appointment created",
+		"appointment": appointmentDetails,
 	})
 
 }
