@@ -26,8 +26,7 @@ func CreateAppointment(c *fiber.Ctx) error {
 		Status:      "pending",
 	}
 
-	appointmentResult := intialization.DB.Create(&appointmentDetails).Error
-	if appointmentResult.Error != nil {
+	if err := intialization.DB.Create(&appointmentDetails).Error; err != nil {
 		c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"error": "could't create appointemnt",
 		})
