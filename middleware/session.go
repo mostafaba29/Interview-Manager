@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"log"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -15,12 +14,10 @@ var (
 )
 
 func Setup() {
-	app := fiber.New()
+
 	Store = session.New(session.Config{
 		CookieHTTPOnly: true,
 		CookieSameSite: fiber.CookieSameSiteLaxMode,
 		Expiration:     time.Hour * 24,
 	})
-	app.Use(NewMiddleware())
-	log.Fatal(app.Listen("8000"))
 }
