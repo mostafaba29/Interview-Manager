@@ -11,7 +11,7 @@ sendBtn.addEventListener('click',()=>{
         textValue:inputTextbox
     };
     var jsonData = JSON.stringify(data);
-    fetch('server',{
+    fetch('localhost:5500/',{
         method: 'POST',
         headers: {
             'Content-Type':'applicaton/json'
@@ -25,7 +25,7 @@ sendBtn.addEventListener('click',()=>{
 })
 // code to recive the data and create a label to show it in the form 
 reciveBtn.addEventListener('click',()=>{
-    fetch('server')
+    fetch('localhost:5500/')
     .then(response =>response.json())
     .then(data =>{
         var outputText = document.createElement("label");
