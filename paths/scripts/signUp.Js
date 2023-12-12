@@ -5,6 +5,7 @@ signupBtn.addEventListener('click',()=>{
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
     let position = document.getElementById('position').value;
+    console.log(password);
     var credentials = {
         username: username,
         password: password,
@@ -22,6 +23,6 @@ signupBtn.addEventListener('click',()=>{
         console.log(data);
     })
     .catch(error => {
-        console.log('error during signUp',error);
+        console.log('error durin login',error);
     })
 })
