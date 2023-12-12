@@ -45,7 +45,7 @@ func Login(c *fiber.Ctx) error {
 	var userInfo struct {
 		Username string
 		Password string
-		Position string
+		//Position string
 	}
 
 	if err := c.BodyParser(&userInfo); err != nil {
@@ -55,7 +55,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	var user models.User
-	intialization.DB.Where("username=? AND position=?", userInfo.Username, userInfo.Position).First(&user)
+	intialization.DB.Where("username=? ", userInfo.Username).First(&user)
 
 	if user.ID == 0 {
 		return c.Status(400).JSON(fiber.Map{
