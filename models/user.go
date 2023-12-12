@@ -4,9 +4,9 @@ import "gorm.io/gorm"
 
 type User struct {
 	gorm.Model
-	Username      string `gorm:"not null"`
-	Password      []byte `gorm:"not null"`
-	Position      string `gorm:"not null"`
+	Username      string `gorm:"not null; unique" json:"username"`
+	Password      []byte `gorm:"not null" json:"password"`
+	Position      string `gorm:"not null" json:"position"`
 	Appointments  []Appointment
 	Notifications []Notification
 }

@@ -8,7 +8,7 @@ loginBtn.addEventListener('click',()=>{
         username: username,
         password: password
     };
-    fetch('auth/login',{
+    fetch('http://localhost:8000/auth/login',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

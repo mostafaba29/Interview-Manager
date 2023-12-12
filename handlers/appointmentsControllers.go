@@ -19,10 +19,11 @@ func CreateAppointment(c *fiber.Ctx) error {
 	}
 
 	appointmentDetails = models.Appointment{
-		ManagerID:   appointmentDetails.ManagerID,
+		ManagerName: appointmentDetails.ManagerName,
 		MeetingTime: appointmentDetails.MeetingTime,
 		UserID:      appointmentDetails.UserID,
 		Description: appointmentDetails.Description,
+		Client:      appointmentDetails.Client,
 		Status:      "pending",
 	}
 
@@ -46,7 +47,7 @@ func Approve(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "Appointment not found"})
 	}
 
-	intialization.DB.Model(&models.Appointment{}).Where("id = ?", c.Params("id")).Update("status", "approved")
+	intialization.DB.Model(&models.Appointment{}).Where("id = ?", c.Params("id")).Update("status", "Confirmed")
 
 	return c.JSON(appointment)
 }
@@ -59,8 +60,9 @@ func CancelAppointment(c *fiber.Ctx) error {
 			"error": "appointment not found",
 		})
 	}
-	intialization.DB.Model(&models.Appointment{}).Where("id = ?", c.Params("id")).Update("status", "declined")
-	return c.JSON(canceledAppointment)
+	intialization.DB.Model(&models.Appointment{}).Where("id = ?", appointmentID).Update("status", "Declined")
+	intialization.DB.Save(&canceledAppointment)
+	return c.Status(200).JSON(canceledAppointment)
 }
 
 func UpdateAppointment(c *fiber.Ctx) error {
@@ -83,7 +85,8 @@ func UpdateAppointment(c *fiber.Ctx) error {
 	intialization.DB.Save(&oldAppointment)
 
 	return c.Status(200).JSON(fiber.Map{
-		"massege": "appointment updated",
+		"massege":  "appointment updated",
+		"new_time": updatedAppointment,
 	})
 
 }
