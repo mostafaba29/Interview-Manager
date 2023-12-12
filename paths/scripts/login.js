@@ -1,5 +1,6 @@
 //const position = document.getElementById('position')
 const loginBtn = document.getElementById('login');
+const logoutBtn = document.getElementById('logout');
 
 loginBtn.addEventListener('click',()=>{
     let username = document.getElementById('username').value;
@@ -21,5 +22,21 @@ loginBtn.addEventListener('click',()=>{
     })
     .catch(error => {
         console.log('error durin login',error);
+    })
+})
+
+logoutBtn.addEventListener('click',()=>{
+    fetch('http://localhost:8000/auth/logout',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data =>{
+        console.log(data);
+    })
+    .catch(error => {
+        console.log('error durin logout',error);
     })
 })
