@@ -1,10 +1,11 @@
 //const position = document.getElementById('position')
 const signupBtn = document.getElementById('signup');
 
-loginBtn.addEventListener('click',()=>{
+signupBtn.addEventListener('click',()=>{
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
     let position = document.getElementById('position').value;
+    console.log(password);
     var credentials = {
         username: username,
         password: password,
@@ -22,6 +23,6 @@ loginBtn.addEventListener('click',()=>{
         console.log(data);
     })
     .catch(error => {
-        console.log('error durin login',error);
+        console.log('error during login',error);
     })
 })

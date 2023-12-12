@@ -13,9 +13,9 @@ import (
 
 func Signup(c *fiber.Ctx) error {
 	var userData struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-		Position string `json:"position"`
+		Username string `json:"username" gorm:"not null"`
+		Password string `json:"password" gorm:"not null"`
+		Position string `json:"position" gorm:"not null"`
 	}
 	if err := c.BodyParser(&userData); err != nil {
 		return c.Status(400).JSON(err.Error())
