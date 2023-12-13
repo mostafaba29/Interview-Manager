@@ -81,7 +81,7 @@ body {
     background-color: #f9f9f9;
   }
   
-.actions .request-meeting-btn {
+.actions .Create-appointment-btn {
     background-color: #27ae60;
     color: #fff;
     border: none;
@@ -91,7 +91,7 @@ body {
     cursor: pointer;
   }
   
-  .actions .request-meeting-btn:hover {
+  .actions .Create-appointment-btn:hover {
     background-color: #219952;
   }
   
