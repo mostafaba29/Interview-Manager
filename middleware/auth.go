@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"strings"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
@@ -13,11 +14,18 @@ var (
 	USER_ID  string = "user_id"
 )
 
-func NewMiddleware() fiber.Handler {
-	return AuthMiddleware
+func AuthMiddleware() fiber.Handler {
+	return NewMiddleware
 }
-func AuthMiddleware(c *fiber.Ctx) error {
+func NewMiddleware(c *fiber.Ctx) error {
+	Store = session.New(session.Config{
+		CookieHTTPOnly: true,
+		CookieSameSite: fiber.CookieSameSiteLaxMode,
+		Expiration:     time.Hour * 24,
+	})
+
 	session, err := Store.Get(c)
+
 	if strings.Split(c.Path(), "/")[1] == "auth" {
 		return c.Next()
 	}

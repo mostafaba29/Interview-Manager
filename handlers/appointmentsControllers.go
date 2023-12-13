@@ -19,11 +19,10 @@ func CreateAppointment(c *fiber.Ctx) error {
 	}
 
 	appointmentDetails = models.Appointment{
-		ManagerName: appointmentDetails.ManagerName,
 		MeetingTime: appointmentDetails.MeetingTime,
-		UserID:      appointmentDetails.UserID,
-		Description: appointmentDetails.Description,
 		Client:      appointmentDetails.Client,
+		Description: appointmentDetails.Description,
+		ManagerName: appointmentDetails.ManagerName,
 		Status:      "pending",
 	}
 
