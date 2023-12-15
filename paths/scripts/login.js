@@ -1,6 +1,6 @@
 //const position = document.getElementById('position')
 const loginBtn = document.getElementById('login');
-const logoutBtn = document.getElementById('logout');
+//const logoutBtn = document.getElementById('logout');
 
 loginBtn.addEventListener('click',()=>{
     let username = document.getElementById('username').value;
@@ -9,7 +9,13 @@ loginBtn.addEventListener('click',()=>{
         username: username,
         password: password
     };
-    fetch('http://localhost:8000/login',{
+    if(username == ""){
+        alert("Username can't be empty");
+    }
+    if(password == ""){
+        alert("Password can't empty");
+    }
+    fetch('http://localhost:8000/auth/login',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -18,14 +24,24 @@ loginBtn.addEventListener('click',()=>{
     })
     .then(response => response.json())
     .then(data =>{
-        console.log(data);
+        if(data == 'logged in'){
+            alert('logged in');
+            //sessionStorage(token);
+            window.location.href = 'EmployeeHome.html';
+        }else{
+            alert(data);
+        }
     })
     .catch(error => {
         console.log('error during login',error);
     })
 })
 
-logoutBtn.addEventListener('click',()=>{
+function sessionStorage(token){
+    localStorage.setItem('token',token);
+}
+
+/*logoutBtn.addEventListener('click',()=>{
     fetch('http://localhost:8000/auth/logout',{
         method: 'POST',
         headers: {
@@ -39,4 +55,4 @@ logoutBtn.addEventListener('click',()=>{
     .catch(error => {
         console.log('error during logout',error);
     })
-})
+})*/
