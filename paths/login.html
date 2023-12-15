@@ -4,23 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
-  <link rel="stylesheet" href="styles/loginStyle.css">
+  <!--<link rel="stylesheet" href="styles/loginStyle.css">-->
   <link rel="stylesheet" href="styles/GlobalStyle.css">
 </head>
-<body>
+<body class = "font-sans bg-grey-200 min-h screen flex justify-center items-center">
 
-<div class="login-container">
-  <div class="login-header">
-    <h2>Login</h2>
+<div class="login-container bg-gray-900 rounded-lg shadow-md overflow-hidden w-96">
+  <div class="login-header bg-orange-900 text-white p-4 text-center">
+    <h2 class="text-lg font-bold">Login</h2>
   </div>
-  <div class="login-form">
-    <div class="form-group">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" placeholder="Enter your username" required>
+  <div class="login-form p-5">
+    <div class="form-group mb-5">
+      <label class ="block font-bold mb-1 text-white" for="username">Username:</label>
+      <input type="text" class="w-full px-3 py-2 border rounded-md" id="username" name="username" placeholder="Enter your username" required>
     </div>
-    <div class="form-group">
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+    <div class="form-group mb-5">
+      <label class="block font-bold mb-1 text-white" for="password">Password:</label>
+      <input class="w-full px-3 py-2 border rounded-md" type="password" id="password" name="password" placeholder="Enter your password" required>
     </div>
     <!--
       <div class="form-group dropDown">
@@ -31,8 +31,8 @@
         </select>
       </div>
         -->
-    <div class="form-group">
-      <button type="submit" id="login">Login</button>
+    <div class="form-group mb-5">
+      <button class="w-full px-3 py-2 border rounded-md block font-bold mb-1 text-white bg-orange-900" type="submit" id="login">Login</button>
       <!--<button type="submit" id="logout">Logut</button>-->
     </div>
   </div>
