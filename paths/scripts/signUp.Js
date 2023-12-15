@@ -25,7 +25,7 @@ signupBtn.addEventListener('click',()=>{
             window.location.href = 'ManagerHome.html';
         }else if(data == 'signed up' && position == 'Employee'){
             alert('signed up as employee');
-            window.location.href = 'ManagerHome.html';
+            window.location.href = 'EmployeeHome.html';
         }else{
             alert(data);
         }
