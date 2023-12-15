@@ -9,7 +9,7 @@ loginBtn.addEventListener('click',()=>{
         username: username,
         password: password
     };
-    fetch('http://localhost:8000/auth/login',{
+    fetch('http://localhost:8000/login',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ loginBtn.addEventListener('click',()=>{
         console.log(data);
     })
     .catch(error => {
-        console.log('error durin login',error);
+        console.log('error during login',error);
     })
 })
 
@@ -37,6 +37,6 @@ logoutBtn.addEventListener('click',()=>{
         console.log(data);
     })
     .catch(error => {
-        console.log('error durin logout',error);
+        console.log('error during logout',error);
     })
 })

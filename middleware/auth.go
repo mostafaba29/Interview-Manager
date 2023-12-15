@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -26,9 +25,10 @@ func NewMiddleware(c *fiber.Ctx) error {
 
 	session, err := Store.Get(c)
 
-	if strings.Split(c.Path(), "/")[1] == "auth" {
-		return c.Next()
-	}
+	// if strings.Split(c.Path(), "/")[1] == "auth" {
+	// 	return c.Next()
+	// }
+
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"massege": "unautherized",
