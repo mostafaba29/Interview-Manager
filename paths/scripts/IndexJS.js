@@ -11,7 +11,7 @@ sendBtn.addEventListener('click',()=>{
         textValue:inputTextbox
     };
     var jsonData = JSON.stringify(data);
-    fetch('localhost:5500/',{
+    fetch('localhost:3000/',{
         method: 'POST',
         headers: {
             'Content-Type':'applicaton/json'
