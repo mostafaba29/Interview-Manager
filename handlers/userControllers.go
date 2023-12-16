@@ -43,20 +43,20 @@ func Signup(c *fiber.Ctx) error {
 
 func Login(c *fiber.Ctx) error {
 
-	// var userInfo struct {
-	// 	Username string
-	// 	Password string
-	// 	Position string
-	// }
+	var userInfo struct {
+		Username string
+		Password string
+		Position string
+	}
 	var user models.User
 
-	if err := c.BodyParser(&user); err != nil {
+	if err := c.BodyParser(&userInfo); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"message": "couldn't read user data",
 		})
 	}
 
-	intialization.DB.Where("username=? position=?", user.Username, user.Position).First(&user)
+	intialization.DB.Where("username=? ", userInfo.Username).First(&user)
 
 	if user.ID == 0 {
 		return c.Status(400).JSON(fiber.Map{
@@ -64,7 +64,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(user.Password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(userInfo.Password)); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"massege": "incorrect password",
 		})
@@ -86,7 +86,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(http.StatusOK).JSON("logged in as" + user.Position)
+	return c.Status(http.StatusOK).JSON("logged in as " + user.Position)
 }
 
 func Logout(c *fiber.Ctx) error {

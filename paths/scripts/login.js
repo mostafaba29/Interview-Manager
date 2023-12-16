@@ -24,22 +24,18 @@ loginBtn.addEventListener('click',()=>{
     })
     .then(response => response.json())
     .then(data =>{
-        if(data == 'logged in'){
-            alert('logged in');
-            //sessionStorage(token);
+        if(data == 'logged in as Employee'){
+            //alert('logged in');
             window.location.href = 'EmployeeHome.html';
-        }else{
-            alert(data);
-        }*/
+        }else if (data == 'logged in as Manager'){
+            window.location.href = 'ManagerHome.html'
+        }
     })
     .catch(error => {
         console.log('error during login',error);
     })
 })
 
-function sessionStorage(token){
-    localStorage.setItem('token',token);
-}
 
 /*logoutBtn.addEventListener('click',()=>{
     fetch('http://localhost:8000/auth/logout',{

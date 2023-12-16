@@ -18,7 +18,7 @@ CreateAppointment.addEventListener('click', ()=>{
         ManagerName:cells[3].textContent
     };
 
-    fetch('http://localhost:3000/create',{
+    fetch('http://localhost:3000/auth/create',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
