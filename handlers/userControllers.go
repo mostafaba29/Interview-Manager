@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"mostafaba29/intialization"
 	"mostafaba29/middleware"
 
@@ -42,20 +43,20 @@ func Signup(c *fiber.Ctx) error {
 
 func Login(c *fiber.Ctx) error {
 
-	var userInfo struct {
-		Username string
-		Password string
-		//Position string
-	}
+	// var userInfo struct {
+	// 	Username string
+	// 	Password string
+	// 	Position string
+	// }
+	var user models.User
 
-	if err := c.BodyParser(&userInfo); err != nil {
+	if err := c.BodyParser(&user); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"message": "couldn't read user data",
 		})
 	}
 
-	var user models.User
-	intialization.DB.Where("username=? ", userInfo.Username).First(&user)
+	intialization.DB.Where("username=? position=?", user.Username, user.Position).First(&user)
 
 	if user.ID == 0 {
 		return c.Status(400).JSON(fiber.Map{
@@ -63,13 +64,14 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(userInfo.Password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(user.Password)); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"massege": "incorrect password",
 		})
 	}
 
 	session, err := middleware.Store.Get(c)
+	log.Println(session)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "something went wrong" + err.Error(),
@@ -84,9 +86,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(http.StatusOK).JSON(fiber.Map{
-		"massege": "logged in",
-	})
+	return c.Status(http.StatusOK).JSON("logged in as" + user.Position)
 }
 
 func Logout(c *fiber.Ctx) error {
