@@ -24,11 +24,10 @@ loginBtn.addEventListener('click',()=>{
     })
     .then(response => response.json())
     .then(data =>{
-        console.log(data);
-        /*if(data == 'logged in'){
+        if(data == 'logged in'){
             alert('logged in');
-            //window.location.href = 'EmployeeHome.html';
-            console.log(data)
+            //sessionStorage(token);
+            window.location.href = 'EmployeeHome.html';
         }else{
             alert(data);
         }*/
@@ -38,6 +37,9 @@ loginBtn.addEventListener('click',()=>{
     })
 })
 
+function sessionStorage(token){
+    localStorage.setItem('token',token);
+}
 
 /*logoutBtn.addEventListener('click',()=>{
     fetch('http://localhost:8000/auth/logout',{
@@ -51,6 +53,6 @@ loginBtn.addEventListener('click',()=>{
         console.log(data);
     })
     .catch(error => {
-        console.log('error durin logout',error);
+        console.log('error during logout',error);
     })
 })*/

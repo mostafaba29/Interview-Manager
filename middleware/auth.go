@@ -17,6 +17,7 @@ var (
 func AuthMiddleware() fiber.Handler {
 	return NewMiddleware
 }
+
 func NewMiddleware(c *fiber.Ctx) error {
 	Store = session.New(session.Config{
 		CookieHTTPOnly: true,
@@ -24,11 +25,12 @@ func NewMiddleware(c *fiber.Ctx) error {
 		Expiration:     time.Hour * 24,
 	})
 
-	session, err := Store.Get(c)
-
 	if strings.Split(c.Path(), "/")[1] == "auth" {
 		return c.Next()
 	}
+
+	session, err := Store.Get(c)
+
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"massege": "unautherized",
