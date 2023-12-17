@@ -22,14 +22,13 @@ func NewMiddleware(c *fiber.Ctx) error {
 	Store = session.New(session.Config{
 		CookieHTTPOnly: true,
 		CookieSameSite: fiber.CookieSameSiteLaxMode,
-		Expiration:     time.Hour * 24,
+		Expiration:     time.Hour * 24 * 10,
 	})
 
+	session, err := Store.Get(c)
 	if strings.Split(c.Path(), "/")[1] == "auth" {
 		return c.Next()
 	}
-
-	session, err := Store.Get(c)
 
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{

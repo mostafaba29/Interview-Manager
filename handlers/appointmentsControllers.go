@@ -11,6 +11,7 @@ import (
 func CreateAppointment(c *fiber.Ctx) error {
 
 	var appointmentDetails models.Appointment
+
 	if err := c.BodyParser(&appointmentDetails); err != nil {
 		c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"error": "could not read appointment details",
@@ -18,24 +19,21 @@ func CreateAppointment(c *fiber.Ctx) error {
 
 	}
 
-	appointmentDetails = models.Appointment{
+	appointment := models.Appointment{
 		MeetingTime: appointmentDetails.MeetingTime,
 		Client:      appointmentDetails.Client,
 		Description: appointmentDetails.Description,
 		ManagerName: appointmentDetails.ManagerName,
-		Status:      "pending",
+		Status:      "Pending",
 	}
 
-	if err := intialization.DB.Create(&appointmentDetails).Error; err != nil {
+	if err := intialization.DB.Create(&appointment).Error; err != nil {
 		c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"error": "could't create appointemnt",
 		})
 	}
 
-	return c.JSON(fiber.Map{
-		"massege":     "appointment created",
-		"appointment": appointmentDetails,
-	})
+	return c.Status(fiber.StatusOK).JSON(appointment)
 
 }
 

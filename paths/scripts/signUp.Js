@@ -11,7 +11,7 @@ signupBtn.addEventListener('click',()=>{
         password: password,
         position: position
     };
-    fetch('http://localhost:3000/auth/signup',{
+    fetch('http://localhost:3000/signup',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

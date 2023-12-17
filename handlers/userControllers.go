@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"log"
 	"mostafaba29/intialization"
 	"mostafaba29/middleware"
 
@@ -56,7 +55,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	intialization.DB.Where("username=? ", userInfo.Username).First(&user)
+	intialization.DB.Where("username=?", userInfo.Username).First(&user)
 
 	if user.ID == 0 {
 		return c.Status(400).JSON(fiber.Map{
@@ -71,12 +70,12 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	session, err := middleware.Store.Get(c)
-	log.Println(session)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "something went wrong" + err.Error(),
 		})
 	}
+
 	session.Set(middleware.USER_ID, user.ID)
 	session.Set(middleware.AUTH_KEY, true)
 	sessERR := session.Save()
