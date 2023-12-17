@@ -1,7 +1,7 @@
 const showBtn = document.getElementById('showBtn');
 
 showBtn.addEventListener('click',()=>{
-    fetch('http://localhost:3000/auth/allappointments')
+    fetch('http://localhost:3000/auth/managerappoints')
         .then(response => {
             // Check if the response status is OK (status code 200-299)
             if (!response.ok) {

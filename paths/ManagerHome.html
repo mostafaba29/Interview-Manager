@@ -38,29 +38,7 @@
         </tr>
       </thead>
       <tbody id="appointmentTable">
-        <!-- Sample data, replace with dynamic data as needed -->
-        <tr>
-          <td>09:00 AM</td>
-          <td>Jane Smith</td>
-          <td>Project Discussion</td>
-          <td>APP DIS UPD</td>
-          <td class="conf">Confirmed</td>
-        </tr>
-        <tr>
-          <td>11:30 AM</td>
-          <td>Bob Johnson</td>
-          <td>Client Presentation</td>
-          <td>APP DIS UPD</td>
-          <td class="pend">Pending</td>
-        </tr>
-        <tr>
-          <td>11:30 AM</td>
-          <td>Bob Johnson</td>
-          <td>Client Presentation</td>
-          <td>APP DIS UPD</td>
-          <td class="rejc">Rejected</td>
-        </tr>
-        <!-- Add more rows as needed -->
+ 
       </tbody>
     </table>
   </div>
@@ -69,7 +47,7 @@
 <script>
   (async ()=>{
     try {
-      const response = await fetch('http://localhost:3000/auth/allappointments');
+      const response = await fetch('http://localhost:3000/managerappoints');
       const data = await response.json();
       renderTable(data);
     }catch (error){

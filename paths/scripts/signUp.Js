@@ -11,7 +11,7 @@ signupBtn.addEventListener('click',()=>{
         password: password,
         position: position
     };
-    fetch('http://localhost:3000/signup',{
+    fetch('http://localhost:3000/auth/signup',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -20,11 +20,11 @@ signupBtn.addEventListener('click',()=>{
     })
     .then(response => response.json())
     .then(data =>{
-        if(data == 'signed up' && position == 'Manager'){
-            alert('signed up as manager');
+        if(data == 'account created' && position == 'Manager'){
+            alert('signed up as Manager');
             window.location.href = 'ManagerHome.html';
-        }else if(data == 'signed up' && position == 'Employee'){
-            alert('signed up as employee');
+        }else if(data == 'account created' && position == 'Employee'){
+            alert('signed up as Employee');
             window.location.href = 'EmployeeHome.html';
         }else{
             alert(data);

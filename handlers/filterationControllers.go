@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"mostafaba29/intialization"
 	"mostafaba29/models"
 
@@ -16,7 +17,8 @@ func ShowAppointments(c *fiber.Ctx) error {
 func ShowManagerAppointments(c *fiber.Ctx) error {
 	var managerAppointments []models.Appointment
 	var manager models.User
-	if err := intialization.DB.Model(&models.Appointment{}).Where("manager_name=?", manager.Username); err != nil {
+	if err := intialization.DB.Model(&models.Appointment{}).Where("manager_name=?", "manger"); err != nil {
+		log.Println(manager.Username)
 		return c.Status(400).JSON(fiber.Map{
 			"massege": "no appointments found",
 		})
