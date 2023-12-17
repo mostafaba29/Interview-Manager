@@ -1,7 +1,7 @@
 const showBtn = document.getElementById('showBtn');
 const logoutBtn = document.getElementById('logoutBtn');
 showBtn.addEventListener('click',()=>{
-    fetch('http://localhost:3000/auth/managerappoints')
+    fetch('http://localhost:3000/auth/appointments/:username')
         .then(response => {
             // Check if the response status is OK (status code 200-299)
             if (!response.ok) {

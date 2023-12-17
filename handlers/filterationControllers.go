@@ -14,14 +14,18 @@ func ShowAppointments(c *fiber.Ctx) error {
 }
 
 func ShowManagerAppointments(c *fiber.Ctx) error {
+	username := c.Params("username")
 	var managerAppointments []models.Appointment
 	//var manager models.User
-	if err := intialization.DB.Model(&models.Appointment{}).Where("manager_name=?", "manger"); err != nil {
-		//log.Println(manager.Username)
-		return c.Status(400).JSON(fiber.Map{
-			"massege": "no appointments found",
-		})
+
+	if err := intialization.DB.Where("manager_name = ?", username).Find(&managerAppointments).Error; err != nil {
+		return c.Status(500).SendString("no appointments found" + err.Error())
 	}
+	// if err := intialization.DB.Model(&models.Appointment{}).Where("manager_name=?", "manger"); err != nil {
+	// 	return c.Status(400).JSON(fiber.Map{
+	// 		"massege": "no appointments found",
+	// 	})
+	// }
 	return c.Status(200).JSON(managerAppointments)
 }
 
