@@ -1,5 +1,5 @@
 const showBtn = document.getElementById('showBtn');
-
+const logoutBtn = document.getElementById('logoutBtn');
 showBtn.addEventListener('click',()=>{
     fetch('http://localhost:3000/auth/managerappoints')
         .then(response => {
@@ -30,4 +30,21 @@ showBtn.addEventListener('click',()=>{
             // Log and handle errors
             console.error('Error:', error);
         });
+})
+
+logoutBtn.addEventListener('click',()=>{
+    fetch('http://localhost:3000/auth/logout',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data =>{
+        console.log(data);
+        window.location.href = "login.html";
+    })
+    .catch(error => {
+        console.log('error during logout',error);
+    })
 })

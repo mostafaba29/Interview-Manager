@@ -25,6 +25,7 @@
   <div class="actions">
     <button id="showBtn">Show Meetings</button>
     <button>Show Faxes</button>
+    <button id ="logoutBtn">Log out</button>
   </div>
   <div class="meeting-table">
     <table>
@@ -47,8 +48,9 @@
 <script>
   (async ()=>{
     try {
-      const response = await fetch('http://localhost:3000/managerappoints');
+      const response = await fetch('http://localhost:3000/auth/managerappoints');
       const data = await response.json();
+      console.log(data);
       renderTable(data);
     }catch (error){
       console.error('Error',error);

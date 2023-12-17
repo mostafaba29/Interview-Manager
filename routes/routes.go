@@ -10,8 +10,8 @@ func SetupRoutes(app *fiber.App) {
 
 	app.Post("/auth/signup", handlers.Signup)
 	app.Post("/auth/login", handlers.Login)
-	app.Post("/logout", handlers.Logout)
-	app.Post("/managerappoints", handlers.ShowManagerAppointments)
+	app.Post("/auth/logout", handlers.Logout)
+	app.Post("/auth/managerappoints", handlers.ShowManagerAppointments)
 	app.Post("/auth/create", handlers.CreateAppointment)
 	app.Patch("/manager/approve/:id", handlers.Approve)
 	app.Patch("/manager/decline/:id", handlers.CancelAppointment)
