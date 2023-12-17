@@ -6,15 +6,6 @@
   <title>Home Page</title>
   <link rel="stylesheet" href="styles/employeeHomeStyle.css">
   <link rel="stylesheet" href="styles/GlobalStyle.css">
-  <script>
-    /*document.addEventListener('DOMContentLoaded',()=>{
-      const token = localStorage.getItem('token');
-      if(!token){
-        alert('error in auth token')
-        window.location.href = 'login.html';
-      }
-    });*/
-  </script>
 </head>
 <body>
 
@@ -49,7 +40,7 @@
       <tbody id="appointmentTable">
         <!-- Sample data, replace with dynamic data as needed -->
         <tr>
-          <td>09:00 AM</td>
+          <!--<td>09:00 AM</td>
           <td>Jane Smith</td>
           <td>Project Discussion</td>
           <td>Confirmed</td>
@@ -61,12 +52,39 @@
           <td>Client Presentation</td>
           <td>Pending</td>
           <td>abd el fatah</td>
-        </tr>
-        <!-- Add more rows as needed -->
+        </tr>-->
       </tbody>
     </table>
   </div>
 </div>
+<script>
+  (async ()=>{
+    try {
+      const response = await fetch('http://localhost:3000/auth/allappointments');
+      const data = await response.json();
+      renderTable(data);
+    }catch (error){
+      console.error('Error',error);
+    }
+  })();
+      function renderTable(data){
+        const tableBody = document.querySelector('#appointmentTable');
+        tableBody.innerHTML = '';
+        if (data && data.length >0){
+        data.slice(0, 10).forEach(row => {
+          const newRow = document.createElement('tr');
+          newRow.innerHTML = `
+              <td>${row.meeting_time}</td>
+              <td>${row.client}</td>
+              <td>${row.description}</td>
+              <td>${row.status}</td>
+              <td>${row.manager_name}</td>
+          `;
+          tableBody.appendChild(newRow);
+      });
+    }
+  }
+</script>
 <script src="scripts/EmployeeHome.js"></script>
 </body>
 </html>
