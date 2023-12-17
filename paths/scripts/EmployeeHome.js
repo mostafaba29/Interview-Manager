@@ -12,10 +12,10 @@ CreateAppointment.addEventListener('click', ()=>{
     let cells = nRow.getElementsByTagName('td');
 
     let data = {
-        MeetingTime:cells[0].textContent,
+        Meeting_Time:cells[0].textContent,
         Client:cells[1].textContent,
-        Discription:cells[2].textContent,
-        ManagerName:cells[3].textContent
+        Description:cells[2].textContent,
+        Manager_Name:cells[3].textContent
     };
 
     fetch('http://localhost:3000/auth/create',{
