@@ -12,5 +12,5 @@ type Appointment struct {
 	Description string `json:"description"`
 	Status      string `json:"status"`
 	Client      string `json:"client"`
-	User        User   `gorm:"foreignKey:UserID" json:"user"`
+	User        User
 }
