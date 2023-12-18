@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"strings"
-	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
@@ -19,12 +18,6 @@ func AuthMiddleware() fiber.Handler {
 }
 
 func NewMiddleware(c *fiber.Ctx) error {
-	Store = session.New(session.Config{
-		CookieHTTPOnly: true,
-		CookieSameSite: fiber.CookieSameSiteLaxMode,
-		Expiration:     time.Hour * 24 * 10,
-	})
-
 	session, err := Store.Get(c)
 	if strings.Split(c.Path(), "/")[1] == "auth" {
 		return c.Next()
@@ -32,7 +25,7 @@ func NewMiddleware(c *fiber.Ctx) error {
 
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"massege": "unautherized",
+			"massege": "unautherized error in session",
 		})
 	}
 

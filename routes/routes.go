@@ -11,7 +11,7 @@ func SetupRoutes(app *fiber.App) {
 	app.Post("/auth/signup", handlers.Signup)
 	app.Post("/auth/login", handlers.Login)
 	app.Post("/auth/logout", handlers.Logout)
-	app.Post("/auth/managerappoints", handlers.ShowManagerAppointments)
+	app.Post("/auth/manager/:username", handlers.ShowManagerAppointments)
 	app.Post("/auth/create", handlers.CreateAppointment)
 	app.Patch("/manager/approve/:id", handlers.Approve)
 	app.Patch("/manager/decline/:id", handlers.CancelAppointment)
@@ -20,5 +20,7 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/showapporved", handlers.ShowApprovedAppointments)
 	app.Get("/showdeclined", handlers.ShowCanceledAppointments)
 	app.Get("/showbyclient", handlers.ShowClient)
+	app.Get("/auth/getbyname/:username", handlers.GetUserByUsername)
+	app.Get("/auth/getuser", handlers.GetCurrentUser)
 
 }

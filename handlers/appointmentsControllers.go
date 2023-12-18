@@ -25,6 +25,7 @@ func CreateAppointment(c *fiber.Ctx) error {
 		Description: appointmentDetails.Description,
 		ManagerName: appointmentDetails.ManagerName,
 		Status:      "Pending",
+		User:        appointmentDetails.User,
 	}
 
 	if err := intialization.DB.Create(&appointment).Error; err != nil {
