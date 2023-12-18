@@ -9,28 +9,29 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetCurrentUser(c *fiber.Ctx) (*models.User, error) {
+func GetCurrentUser(c *fiber.Ctx) *models.User {
 	sess, err := middleware.Store.Get(c)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get user from session: %v", err)
+		c.JSON("failed to get user from session")
 	}
 
 	userID := sess.Get(middleware.USER_ID)
 	if userID == nil {
-		return nil, c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "not autherized cant get id",
 		})
 	}
 
 	var user models.User
 	intialization.DB.Where("id=?", userID).First(&user)
+	fmt.Println(userID)
 	if err != nil {
-		return nil, c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "not autherized something is wrong",
 		})
 	}
 
-	return &user, c.Status(fiber.StatusOK).JSON(user)
+	return &user
 }
 
 func ShowAppointments(c *fiber.Ctx) error {
@@ -40,10 +41,10 @@ func ShowAppointments(c *fiber.Ctx) error {
 }
 
 func ShowManagerAppointments(c *fiber.Ctx) error {
-	user, err := GetCurrentUser(c)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	}
+	user := GetCurrentUser(c)
+	// if err != nil {
+	// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	// }
 
 	appointments := []models.Appointment{}
 
