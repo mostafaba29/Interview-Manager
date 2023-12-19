@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/session"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -41,7 +40,7 @@ func Signup(c *fiber.Ctx) error {
 	return c.Status(200).JSON("account created")
 }
 
-func Login(c *fiber.Ctx) (*session.Session, error) {
+func Login(c *fiber.Ctx) error {
 
 	var userInfo struct {
 		Username string
@@ -51,7 +50,7 @@ func Login(c *fiber.Ctx) (*session.Session, error) {
 	var user models.User
 
 	if err := c.BodyParser(&userInfo); err != nil {
-		return nil, c.Status(http.StatusBadRequest).JSON(fiber.Map{
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"message": "couldn't read user data",
 		})
 	}
@@ -59,34 +58,34 @@ func Login(c *fiber.Ctx) (*session.Session, error) {
 	intialization.DB.Where("username=?", userInfo.Username).First(&user)
 
 	if user.ID == 0 {
-		return nil, c.Status(400).JSON(fiber.Map{
+		return c.Status(400).JSON(fiber.Map{
 			"massege": "user not found",
 		})
 	}
 
 	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(userInfo.Password)); err != nil {
-		return nil, c.Status(http.StatusBadRequest).JSON(fiber.Map{
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"massege": "incorrect password",
 		})
 	}
 
 	session, err := middleware.Store.Get(c)
 	if err != nil {
-		return nil, c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "something went wrong" + err.Error(),
 		})
 	}
+	sessionID := session.ID()
 
 	session.Set(middleware.USER_ID, user.ID)
 	session.Set(middleware.AUTH_KEY, true)
 	sessERR := session.Save()
 	if sessERR != nil {
-		return nil, c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "something went wrong" + err.Error(),
 		})
 	}
-
-	return session, c.Status(http.StatusOK).JSON("logged in as " + user.Position)
+	return c.Status(http.StatusOK).JSON(fiber.Map{"user": "logged in as " + user.Position, "session": sessionID})
 }
 
 func Logout(c *fiber.Ctx) error {
