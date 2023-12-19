@@ -7,9 +7,10 @@ import (
 	"mostafaba29/models"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/session"
 )
 
-func GetCurrentUser(c *fiber.Ctx) *models.User {
+func GetCurrentUser(c *fiber.Ctx) (*session.Session, *models.User, error) {
 	sess, err := middleware.Store.Get(c)
 	if err != nil {
 		c.JSON("failed to get user from session")
@@ -31,7 +32,7 @@ func GetCurrentUser(c *fiber.Ctx) *models.User {
 		})
 	}
 
-	return &user
+	return sess, &user, c.JSON("user found")
 }
 
 func ShowAppointments(c *fiber.Ctx) error {
@@ -41,10 +42,10 @@ func ShowAppointments(c *fiber.Ctx) error {
 }
 
 func ShowManagerAppointments(c *fiber.Ctx) error {
-	user := GetCurrentUser(c)
-	// if err != nil {
-	// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-	// }
+	_, user, err := GetCurrentUser(c)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+	}
 
 	appointments := []models.Appointment{}
 
