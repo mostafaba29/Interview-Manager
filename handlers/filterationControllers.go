@@ -31,7 +31,7 @@ func GetCurrentUser(c *fiber.Ctx) (*models.User, error) {
 		})
 	}
 
-	return &user, c.JSON("user found")
+	return &user, c.JSON(fiber.StatusOK)
 }
 
 func ShowAppointments(c *fiber.Ctx) error {
