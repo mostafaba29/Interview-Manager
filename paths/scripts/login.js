@@ -30,8 +30,8 @@ loginBtn.addEventListener('click',()=>{
     })
     .then(response => response.json())
     .then(data =>{
-        const sessionToken = data.session;
-        document.cookie = `session_id=${sessionToken}; path=/; HttpOnly=true; SameSite=lax`;
+       // const sessionToken = data.session;
+        //document.cookie = `session_id=${sessionToken}; path=/; HttpOnly=true; SameSite=lax`;
         //localStorage.setItem('session token',data.session);
         //sessionStorage.setItem('session token',data.session);
 

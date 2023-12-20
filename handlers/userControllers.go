@@ -3,6 +3,7 @@ package handlers
 import (
 	"mostafaba29/intialization"
 	"mostafaba29/middleware"
+	"time"
 
 	"mostafaba29/models"
 	"net/http"
@@ -76,6 +77,15 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 	sessionID := session.ID()
+
+	cookie := fiber.Cookie{
+		Name:     "session",
+		Value:    sessionID,
+		Expires:  time.Now().Add(time.Hour * 24 * 10),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
 
 	session.Set(middleware.USER_ID, user.ID)
 	session.Set(middleware.AUTH_KEY, true)
