@@ -1,5 +1,5 @@
 const CreateAppointment = document.getElementsByClassName('Create-appointment-btn')[0];
-
+const logoutBtn = document.getElementById('logoutBtn');
 CreateAppointment.addEventListener('click', ()=>{
     let appointmentTable = document.getElementById('appointmentTable');
     let nRow = document.createElement('tr');
@@ -33,4 +33,21 @@ CreateAppointment.addEventListener('click', ()=>{
         console.log('error creating appointment',error);
     })
 
+})
+
+logoutBtn.addEventListener('click',()=>{
+    fetch('http://localhost:3000/auth/logout',{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data =>{
+        console.log(data);
+        window.location.href = "login.html";
+    })
+    .catch(error => {
+        console.log('error during logout',error);
+    })
 })

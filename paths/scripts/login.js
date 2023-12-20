@@ -1,5 +1,7 @@
 //const position = document.getElementById('position')
 const loginBtn = document.getElementById('login');
+const userDiv = document.querySelector('#loginbox');
+const passDiv = document.querySelector('#passbox');
 //const logoutBtn = document.getElementById('logout');
 
 loginBtn.addEventListener('click',()=>{
@@ -10,7 +12,11 @@ loginBtn.addEventListener('click',()=>{
         password: password
     };
     if(username == ""){
-        alert("Username can't be empty");
+        let errorMessage = document.createElement("p");
+        errorMessage.textContent = "Username can't be empty";
+        errorMessage.classList.add("co-red-600","font-bold");
+        userDiv.insertBefore(errorMessage,userDiv.firstChild.nextSibling);
+        //alert("Username can't be empty");
     }
     if(password == ""){
         alert("Password can't empty");
@@ -24,11 +30,15 @@ loginBtn.addEventListener('click',()=>{
     })
     .then(response => response.json())
     .then(data =>{
-        if(data == 'logged in as Employee'){
-            //alert('logged in');
+        const sessionToken = data.session;
+        document.cookie = `session_id=${sessionToken}; path=/; HttpOnly=true; SameSite=lax`;
+        //localStorage.setItem('session token',data.session);
+        //sessionStorage.setItem('session token',data.session);
+
+        if(data.user == 'logged in as Employee'){
             window.location.href = 'EmployeeHome.html';
-        }else if (data == 'logged in as Manager'){
-            window.location.href = 'ManagerHome.html'
+        }else if (data.user == 'logged in as Manager'){
+            window.location.href = 'ManagerHome.html';
         }
     })
     .catch(error => {
@@ -52,3 +62,4 @@ loginBtn.addEventListener('click',()=>{
         console.log('error during logout',error);
     })
 })*/
+
