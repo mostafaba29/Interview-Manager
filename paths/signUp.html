@@ -5,33 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign Up Page</title>
   <link rel="stylesheet" href="styles/GlobalStyle.css">
-  <link rel="stylesheet" href="styles/signUpStyle.css">
+  <!--<link rel="stylesheet" href="styles/signUpStyle.css">-->
 </head>
-<body>
+<body class=" body font-arial bg-slate-300 m-0 p-0 flex h-screen items-center justify-center">
 
-<div class="signup-container">
-  <div class="signup-header">
-    <h2>Sign Up</h2>
+<div class="signup-container bg-slate-100 rounded-xl shadow-sm overflow-hidden w-80 border-2 border-green-600">
+  <div class="signup-header bg-green-600 text-white p-4 text-center">
+    <h2 class =" text-xl font-bold">Sign Up</h2>
   </div>
-  <div class="signup-form">
-    <div class="form-group">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" placeholder="Choose a username" required>
+  <div class="signup-form p-5">
+    <div id= "userbox" class="form-group mb-5">
+      <label class="block font-bold mb-2 text-slate-700" for="username">Username:</label>
+      <input class="w-full p-2 box-border border border-solid border-gray-300 rounded" type="text" id="username" name="username" placeholder="Type a username" required>
     </div>
-    <div class="form-group">
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" placeholder="Choose a password" required>
+    <div id="passbox" class="form-group mb-5">
+      <label class="block font-bold mb-2 text-slate-700" for="password">Password:</label>
+      <input class="w-full p-2 box-border border border-solid border-gray-300 rounded" type="password" id="password" name="password" placeholder="Type a password" required>
     </div>
-    <div class="form-group">
-      <label for="position">Position:</label>
-      <select id="position" name="position" required>
+    <div class="form-group mb-5">
+      <label class="block font-bold mb-2 text-slate-700" for="position">Position:</label>
+      <select class="w-full p-2 box-border border border-solid border-gray-300 rounded " id="position"  name="position" required >
+        <option value="" selected disabled>select a positon</option>
         <option value="Manager">Manager</option>
         <option value="Employee">Employee</option>
         <!-- Add more options as needed -->
       </select>
     </div>
-    <div class="form-group">
-      <button  type="submit" id="signup">Sign Up</button>
+    <div class="form-group mb-5">
+      <button class="bg-green-600 text-white font-bold border-none p-3 rounded cursor-pointer w-full hover:bg-green-500 " type="submit" id="signup">Sign Up</button>
     </div>
   </div>
 </div>

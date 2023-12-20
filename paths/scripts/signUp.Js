@@ -1,10 +1,24 @@
 //const position = document.getElementById('position')
 const signupBtn = document.getElementById('signup');
-
+const userDiv = document.getElementById('userbox');
+const passDiv = document.getElementById('passbox')
 signupBtn.addEventListener('click',()=>{
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
     let position = document.getElementById('position').value;
+    if(username == ""){
+        let errorMessage = document.createElement("p");
+        errorMessage.textContent = "Username can't be empty";
+        errorMessage.classList.add("text-red-600","font-bold");
+        userDiv.insertBefore(errorMessage,userDiv.firstChild.nextSibling);
+        //alert("Username can't be empty");
+    }
+    if(password == ""){
+        let passErrorMessage = document.createElement("p");
+        passErrorMessage.textContent = "Password can't be empty";
+        passErrorMessage.classList.add("text-red-600","font-bold");
+        passDiv.insertBefore(passErrorMessage,passDiv.firstChild.nextSibling);
+    }
     console.log(password);
     var credentials = {
         username: username,
@@ -27,7 +41,7 @@ signupBtn.addEventListener('click',()=>{
             alert('signed up as Employee');
             window.location.href = 'EmployeeHome.html';
         }else{
-            alert(data);
+            console.log(data);
         }
     })
     .catch(error => {
