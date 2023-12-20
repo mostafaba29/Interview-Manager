@@ -14,12 +14,15 @@ loginBtn.addEventListener('click',()=>{
     if(username == ""){
         let errorMessage = document.createElement("p");
         errorMessage.textContent = "Username can't be empty";
-        errorMessage.classList.add("co-red-600","font-bold");
+        errorMessage.classList.add("text-red-600","font-bold");
         userDiv.insertBefore(errorMessage,userDiv.firstChild.nextSibling);
         //alert("Username can't be empty");
     }
     if(password == ""){
-        alert("Password can't empty");
+        let passErrorMessage = document.createElement("p");
+        passErrorMessage.textContent = "Password can't be empty";
+        passErrorMessage.classList.add("text-red-600","font-bold");
+        passDiv.insertBefore(passErrorMessage,passDiv.firstChild.nextSibling);
     }
     fetch('http://localhost:3000/auth/login',{
         method: 'POST',
@@ -30,10 +33,10 @@ loginBtn.addEventListener('click',()=>{
     })
     .then(response => response.json())
     .then(data =>{
-       // const sessionToken = data.session;
-        //document.cookie = `session_id=${sessionToken}; path=/; HttpOnly=true; SameSite=lax`;
+        const sessionToken = data.session;
+        document.cookie = `sessionId=${sessionToken}; path=/; HttpOnly=true; SameSite=lax`;
         //localStorage.setItem('session token',data.session);
-        //sessionStorage.setItem('session token',data.session);
+        sessionStorage.setItem('session token',data.session);
 
         if(data.user == 'logged in as Employee'){
             window.location.href = 'EmployeeHome.html';
