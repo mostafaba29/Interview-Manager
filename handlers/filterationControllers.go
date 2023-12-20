@@ -15,16 +15,16 @@ func GetCurrentUser(c *fiber.Ctx) (*models.User, error) {
 		c.JSON("failed to get user from session")
 	}
 
-	userID := sess.Get(middleware.USER_ID)
-	if userID == nil {
+	username := sess.Get(middleware.User)
+	if username == nil {
 		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "not autherized cant get id",
 		})
 	}
 
 	var user models.User
-	intialization.DB.Where("id=?", userID).First(&user)
-	fmt.Println(userID)
+	intialization.DB.Where("username=?", username).First(&user)
+	fmt.Println(username)
 	if err != nil {
 		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "not autherized something is wrong",

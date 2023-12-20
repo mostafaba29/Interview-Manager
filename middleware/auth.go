@@ -8,9 +8,8 @@ import (
 )
 
 var (
-	Store    *session.Store
-	AUTH_KEY string = "authenticated"
-	USER_ID  string = "user_id"
+	Store *session.Store
+	User  string = "username"
 )
 
 func AuthMiddleware() fiber.Handler {
@@ -18,6 +17,7 @@ func AuthMiddleware() fiber.Handler {
 }
 
 func NewMiddleware(c *fiber.Ctx) error {
+
 	session, err := Store.Get(c)
 	if strings.Split(c.Path(), "/")[1] == "auth" {
 		return c.Next()
@@ -29,7 +29,7 @@ func NewMiddleware(c *fiber.Ctx) error {
 		})
 	}
 
-	if session.Get(AUTH_KEY) == nil {
+	if session.Get(User) == nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"massege": "unautherized to proceed",
 		})
