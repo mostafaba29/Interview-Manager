@@ -9,11 +9,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetCurrentUser(c *fiber.Ctx) (*models.User, error) {
+func GetCurrentUser(c *fiber.Ctx) error {
 	sess, err := middleware.Store.Get(c)
 	if err != nil {
 		c.JSON("failed to get user from session")
 	}
+	fmt.Println(sess)
 
 	username := sess.Get(middleware.User)
 	if username == nil {
@@ -30,7 +31,7 @@ func GetCurrentUser(c *fiber.Ctx) (*models.User, error) {
 		})
 	}
 
-	return &user, c.JSON(fiber.StatusOK)
+	return c.JSON(user)
 }
 
 func ShowAppointments(c *fiber.Ctx) error {
@@ -40,16 +41,32 @@ func ShowAppointments(c *fiber.Ctx) error {
 }
 
 func ShowManagerAppointments(c *fiber.Ctx) error {
-	user, err := GetCurrentUser(c)
+	//user := GetCurrentUser(c)
+	sess, err := middleware.Store.Get(c)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
+		c.JSON("failed to get user from session")
+	}
+	fmt.Println(sess)
+	username := sess.Get(middleware.User)
+	if username == nil {
+		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"error": "not autherized cant get id",
+		})
 	}
 
-	var appointments []models.Appointment
+	// var user models.User
+	// manager_name := intialization.DB.Where("username=?", username).First(&user)
+	// if err != nil {
+	// 	c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+	// 		"error": "not autherized something is wrong",
+	// 	})
+	// }
+	fmt.Println(username)
 
-	managerName := user.Username
-	fmt.Println(managerName)
-	if err := intialization.DB.Preload("User").Where("manager_name = ?", managerName).Find(&appointments).Error; err != nil {
+	var appointments []models.Appointment
+	// managerName := user
+	//fmt.Println(managerName)
+	if err := intialization.DB.Where("manager_name = ?", username).Find(&appointments).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 

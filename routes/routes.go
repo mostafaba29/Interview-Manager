@@ -20,5 +20,8 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/showapporved", handlers.ShowApprovedAppointments)
 	app.Get("/showdeclined", handlers.ShowCanceledAppointments)
 	app.Get("/showbyclient", handlers.ShowClient)
-	//app.Get("/auth/getuser", handlers.GetCurrentUser)
+	app.Get("/auth/getuser", handlers.GetCurrentUser)
+	app.Options("/*", func(c *fiber.Ctx) error {
+		return c.SendStatus(fiber.StatusOK)
+	})
 }

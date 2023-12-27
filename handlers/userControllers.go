@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"mostafaba29/intialization"
 	"mostafaba29/middleware"
 
@@ -76,6 +77,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 	sessionID := session.ID()
+	fmt.Println(session)
 
 	session.Set("username", user.Username)
 	sessErr := session.Save()
