@@ -29,6 +29,7 @@ loginBtn.addEventListener('click',()=>{
         headers: {
             'Content-Type': 'application/json',
         },
+        //credentials:"include",
         body: JSON.stringify(credentials), 
     })
     .then(response => response.json())

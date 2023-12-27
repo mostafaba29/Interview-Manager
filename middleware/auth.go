@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"strings"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
@@ -13,6 +14,11 @@ var (
 )
 
 func AuthMiddleware() fiber.Handler {
+	Store = session.New(session.Config{
+		CookieHTTPOnly: true,
+		CookieSameSite: fiber.CookieSameSiteLaxMode,
+		Expiration:     time.Hour * 24 * 10,
+	})
 	return NewMiddleware
 }
 

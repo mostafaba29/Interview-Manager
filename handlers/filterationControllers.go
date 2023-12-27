@@ -24,7 +24,6 @@ func GetCurrentUser(c *fiber.Ctx) (*models.User, error) {
 
 	var user models.User
 	intialization.DB.Where("username=?", username).First(&user)
-	fmt.Println(username)
 	if err != nil {
 		c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error": "not autherized something is wrong",
@@ -46,9 +45,10 @@ func ShowManagerAppointments(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	appointments := []models.Appointment{}
+	var appointments []models.Appointment
 
 	managerName := user.Username
+	fmt.Println(managerName)
 	if err := intialization.DB.Preload("User").Where("manager_name = ?", managerName).Find(&appointments).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
