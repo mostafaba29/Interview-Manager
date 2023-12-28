@@ -1,7 +1,7 @@
 const showBtn = document.getElementById('showBtn');
 const logoutBtn = document.getElementById('logoutBtn');
 showBtn.addEventListener('click',()=>{
-    fetch('http://localhost:3000/auth/manager/appoints')
+    fetch('http://localhost:5000/auth/manager/appoints')
         .then(response => {
             // Check if the response status is OK (status code 200-299)
             if (!response.ok) {
@@ -33,7 +33,7 @@ showBtn.addEventListener('click',()=>{
 })
 
 logoutBtn.addEventListener('click',()=>{
-    fetch('http://localhost:3000/auth/logout',{
+    fetch('http://localhost:5000/auth/logout',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -67,7 +67,7 @@
 <script>
   (async ()=>{
     try {
-      const response = await fetch('http://localhost:3000/auth/allappointments');
+      const response = await fetch('http://localhost:5000/auth/allappointments');
       const data = await response.json();
       renderTable(data);
     }catch (error){

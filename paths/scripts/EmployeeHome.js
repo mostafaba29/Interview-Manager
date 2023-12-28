@@ -62,7 +62,7 @@ subBtn.addEventListener('click',()=>{
             Description:reason,
             Manager_Name:mName
           }
-            fetch('http://localhost:3000/auth/create',{
+            fetch('http://localhost:5000/auth/create',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ subBtn.addEventListener('click',()=>{
           formContainer.remove();
 
           try {
-            const response = await fetch('http://localhost:3000/auth/allappointments');
+            const response = await fetch('http://localhost:5000/auth/allappointments');
             const data = await response.json();
             renderTable(data);
           } catch (error) {
@@ -140,7 +140,7 @@ subBtn.addEventListener('click',()=>{
 })*/
 
 logoutBtn.addEventListener('click',()=>{
-    fetch('http://localhost:3000/auth/logout',{
+    fetch('http://localhost:5000/auth/logout',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

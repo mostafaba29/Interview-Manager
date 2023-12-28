@@ -41,7 +41,7 @@
       </thead>
       <tbody id="appointmentTable">
           <td>7pm</td>
-          <td>abdo</td>
+          <td>abdo</td> 
           <td>reason</td>
           <td class="flex justify-between">
           <a href="#"><i class="fa-solid fa-check fa-xl"></i></a>
@@ -57,7 +57,7 @@
 <script>
   (async ()=>{
     try {
-      const response = await fetch('http://localhost:3000/auth/manager/appoints');
+      const response = await fetch('http://localhost:5000/auth/manager/appoints');
       const data = await response.json();
       console.log(data);
       renderTable(data);
