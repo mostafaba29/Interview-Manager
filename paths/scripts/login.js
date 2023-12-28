@@ -24,7 +24,7 @@ loginBtn.addEventListener('click',()=>{
         passErrorMessage.classList.add("text-red-600","font-bold");
         passDiv.insertBefore(passErrorMessage,passDiv.firstChild.nextSibling);
     }
-    fetch('http://localhost:3000/auth/login',{
+    fetch('http://localhost:3000/login',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
