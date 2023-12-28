@@ -1,44 +1,54 @@
 package middleware
 
 import (
-	"strings"
+	"fmt"
+	"mostafaba29/handlers"
+	"mostafaba29/intialization"
+	"mostafaba29/models"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/session"
-)
-
-var (
-	Store *session.Store
-	User  string = "username"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func AuthMiddleware() fiber.Handler {
-	Store = session.New(session.Config{
-		CookieHTTPOnly: true,
-		CookieSameSite: fiber.CookieSameSiteLaxMode,
-		Expiration:     time.Hour * 24 * 10,
-	})
-	return NewMiddleware
+	return RequireAuth
 }
 
-func NewMiddleware(c *fiber.Ctx) error {
+func RequireAuth(c *fiber.Ctx) error {
+	tokenString := c.Cookies("jwt")
 
-	session, err := Store.Get(c)
-	if strings.Split(c.Path(), "/")[1] == "auth" {
-		return c.Next()
-	}
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return handlers.PrivateKey, nil
+	})
 
 	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"massege": "unautherized error in session",
-		})
+		if err == jwt.ErrSignatureInvalid {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"message": "Invalid token signature",
+			})
+		}
 	}
 
-	if session.Get(User) == nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"massege": "unautherized to proceed",
-		})
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+
+		//check for experation
+		if float64(time.Now().Unix()) > claims["expires"].(float64) {
+			c.Status(fiber.StatusUnauthorized)
+		}
+
+		//find the user with token
+		var user models.User
+		intialization.DB.First(&user, claims["issuer"])
+
+		if user.ID == 0 {
+			c.Status(fiber.StatusUnauthorized)
+		}
+		c.Locals("user_id", user.ID)
 	}
 	return c.Next()
 }

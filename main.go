@@ -16,9 +16,10 @@ func init() {
 
 func main() {
 	app := fiber.New()
+
 	app.Use(middleware.CorsMiddleware())
-	app.Use(middleware.AuthMiddleware())
+	app.Use("/auth", middleware.AuthMiddleware())
 
 	routes.SetupRoutes(app)
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(":5000"))
 }

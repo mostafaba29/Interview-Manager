@@ -1,16 +1,21 @@
 package handlers
 
 import (
-	"fmt"
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
 	"mostafaba29/intialization"
-	"mostafaba29/middleware"
+	"net/http"
+	"time"
 
 	"mostafaba29/models"
-	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
+
+var PrivateKey *ecdsa.PrivateKey
 
 func Signup(c *fiber.Ctx) error {
 	var userData struct {
@@ -70,40 +75,61 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	session, err := middleware.Store.Get(c)
+	// session, err := middleware.Store.Get(c)
+	// if err != nil {
+	// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	// 		"error": "something went wrong" + err.Error(),
+	// 	})
+	// }
+	// //sessionID := session.ID()
+
+	// session.Set("username", user.Username)
+	// sessErr := session.Save()
+	// fmt.Println(session)
+	// if sessErr != nil {
+	// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	// 		"error": "something went wrong" + err.Error(),
+	// 	})
+	// }
+	claims := jwt.NewWithClaims(jwt.SigningMethodES256, jwt.MapClaims{
+		"issuer":  user.Username,
+		"expires": time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	PrivateKey, _ = ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+
+	token, err := claims.SignedString(PrivateKey)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "something went wrong" + err.Error(),
-		})
-	}
-	sessionID := session.ID()
-	fmt.Println(session)
-
-	session.Set("username", user.Username)
-	sessErr := session.Save()
-	if sessErr != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "something went wrong" + err.Error(),
+			"message": "could not login " + err.Error(),
 		})
 	}
 
-	return c.Status(http.StatusOK).JSON(fiber.Map{"user": "logged in as " + user.Position, "session": sessionID})
+	cookie := fiber.Cookie{
+		Name:     "jwt",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 24),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+
+	return c.JSON(fiber.Map{
+		"message": "logged in",
+	})
 }
 
 func Logout(c *fiber.Ctx) error {
-	session, err := middleware.Store.Get(c)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "no session",
-		})
+	cookie := fiber.Cookie{
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true,
 	}
-	sessERR := session.Destroy()
-	if sessERR != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "something is wrong" + err.Error(),
-		})
-	}
-	return c.Status(http.StatusOK).JSON(fiber.Map{
-		"massege": "logged out",
+
+	c.Cookie(&cookie)
+
+	return c.JSON(fiber.Map{
+		"message": "Logged Out",
 	})
 }
