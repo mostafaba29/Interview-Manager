@@ -57,7 +57,12 @@
 <script>
   (async ()=>{
     try {
-      const response = await fetch('http://localhost:5000/auth/manager/appoints');
+      const response = await fetch('http://localhost:5000/auth/manager/appoints',{
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        credentials:"include",
+      });
       const data = await response.json();
       console.log(data);
       renderTable(data);
