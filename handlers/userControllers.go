@@ -4,10 +4,8 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
-	"log"
 	"mostafaba29/intialization"
 	"net/http"
-	"strconv"
 	"time"
 
 	"mostafaba29/models"
@@ -17,7 +15,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const secret = "SECRET"
+var PrivateKey *ecdsa.PrivateKey
 
 func Signup(c *fiber.Ctx) error {
 	var userData struct {
@@ -94,16 +92,13 @@ func Login(c *fiber.Ctx) error {
 	// 	})
 	// }
 	claims := jwt.NewWithClaims(jwt.SigningMethodES256, jwt.MapClaims{
-		"issuer":  strconv.Itoa(int(user.ID)),
+		"issuer":  user.Username,
 		"expires": time.Now().Add(time.Hour * 24).Unix(),
 	})
 
-	privateKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	if err != nil {
-		log.Println(err)
-	}
+	PrivateKey, _ = ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 
-	token, err := claims.SignedString(privateKey)
+	token, err := claims.SignedString(PrivateKey)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "could not login " + err.Error(),
