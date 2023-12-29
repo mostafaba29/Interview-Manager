@@ -67,23 +67,23 @@ func ShowManagerAppointments(c *fiber.Ctx) error {
 	return c.JSON(appointments)
 }
 
-// func ShowApprovedAppointments(c *fiber.Ctx) error {
-// 	var approvedAppointments []models.Appointment
-// 	if err := intialization.DB.Where("status=?", "Confirmed").First(&approvedAppointments); err != nil {
-// 		return c.Status(400).JSON(fiber.Map{
-// 			"massege": "no approved appointments found",
-// 		})
-// 	}
-// 	return c.JSON(approvedAppointments)
-// }
+func ShowApprovedAppointments(c *fiber.Ctx) error {
+	var approvedAppointments []models.Appointment
+	if err := intialization.DB.Where("status=?", "Confirmed").First(&approvedAppointments); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"massege": "no approved appointments found",
+		})
+	}
+	return c.JSON(approvedAppointments)
+}
 
-// func ShowCanceledAppointments(c *fiber.Ctx) error {
-// 	var canceledAppointments []models.Appointment
-// 	if err := intialization.DB.Where("status=?", "Declined").First(&canceledAppointments); err != nil {
-// 		return c.Status(400).JSON(fiber.Map{
-// 			"massege": "no canceled appointments found",
-// 		})
+func ShowCanceledAppointments(c *fiber.Ctx) error {
+	var canceledAppointments []models.Appointment
+	if err := intialization.DB.Where("status=?", "Declined").First(&canceledAppointments); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"massege": "no canceled appointments found",
+		})
 
-// 	}
-// 	return c.JSON(canceledAppointments)
-// }
+	}
+	return c.JSON(canceledAppointments)
+}
