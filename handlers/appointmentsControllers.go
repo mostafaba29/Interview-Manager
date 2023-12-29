@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"mostafaba29/intialization"
 	"mostafaba29/models"
 	"net/http"
@@ -38,12 +39,13 @@ func CreateAppointment(c *fiber.Ctx) error {
 func Approve(c *fiber.Ctx) error {
 	var appointment models.Appointment
 	result := intialization.DB.First(&appointment, c.Params("id"))
+	fmt.Println(c.Params("id"))
 	if result.Error != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"message": "Appointment not found"})
 	}
 
 	intialization.DB.Model(&models.Appointment{}).Where("id = ?", c.Params("id")).Update("status", "Confirmed")
-	intialization.DB.Save(&appointment)
+	//intialization.DB.Save(&appointment)
 	return c.JSON(appointment)
 }
 
@@ -56,7 +58,7 @@ func CancelAppointment(c *fiber.Ctx) error {
 		})
 	}
 	intialization.DB.Model(&models.Appointment{}).Where("id = ?", appointmentID).Update("status", "Declined")
-	intialization.DB.Save(&canceledAppointment)
+	//intialization.DB.Save(&canceledAppointment)
 	return c.Status(200).JSON(canceledAppointment)
 }
 

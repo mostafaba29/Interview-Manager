@@ -75,22 +75,6 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	// session, err := middleware.Store.Get(c)
-	// if err != nil {
-	// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-	// 		"error": "something went wrong" + err.Error(),
-	// 	})
-	// }
-	// //sessionID := session.ID()
-
-	// session.Set("username", user.Username)
-	// sessErr := session.Save()
-	// fmt.Println(session)
-	// if sessErr != nil {
-	// 	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-	// 		"error": "something went wrong" + err.Error(),
-	// 	})
-	// }
 	claims := jwt.NewWithClaims(jwt.SigningMethodES256, jwt.MapClaims{
 		"issuer":  user.Username,
 		"expires": time.Now().Add(time.Hour * 24).Unix(),

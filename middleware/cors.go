@@ -11,7 +11,7 @@ func CorsMiddleware() fiber.Handler {
 		c.Set("Access-Control-Allow-Origin", "http://localhost:5500")
 
 		// Specify allowed methods
-		c.Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS")
 
 		// Specify allowed headers
 		c.Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
