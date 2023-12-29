@@ -43,7 +43,7 @@ func Approve(c *fiber.Ctx) error {
 	}
 
 	intialization.DB.Model(&models.Appointment{}).Where("id = ?", c.Params("id")).Update("status", "Confirmed")
-
+	intialization.DB.Save(&appointment)
 	return c.JSON(appointment)
 }
 
