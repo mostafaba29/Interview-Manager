@@ -11,6 +11,7 @@ loginBtn.addEventListener('click',()=>{
         username: username,
         password: password
     };
+    localStorage.setItem('user',username);
     if(username == ""){
         let errorMessage = document.createElement("p");
         errorMessage.textContent = "Username can't be empty";
@@ -39,6 +40,7 @@ loginBtn.addEventListener('click',()=>{
         //localStorage.setItem('session token',data.session);
        // sessionStorage.setItem('session token',data.session);
        //console.log(data.session);
+       localStorage.setItem('position',data.position);
         if(data.message == 'logged in' && data.position == "Employee"){
              window.location.href = 'EmployeeHome.html';
         }else if (data.message == 'logged in' && data.position == "Manager"){

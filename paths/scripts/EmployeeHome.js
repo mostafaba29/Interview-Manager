@@ -67,6 +67,7 @@ subBtn.addEventListener('click',()=>{
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials:"include",
                 body: JSON.stringify(appointmentData), 
             })
             .then(response => response.json())
