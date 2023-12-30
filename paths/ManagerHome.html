@@ -40,6 +40,9 @@
       <tbody id="appointmentTable">
       </tbody>
     </table>
+    <div id="pagenation" class="flex justify-center margin-2">
+  
+    </div>
   </div>
 </div>
 <script src="scripts/ManagerHome.js"></script>
@@ -50,8 +53,12 @@
   document.getElementById('username').innerHTML=username;
   document.getElementById('position').innerHTML=pos;
 
-
-  (async ()=>{
+// fetching the appointments
+  async function showAppointments(){
+    /*
+    the functino fetches the manager appointments from db for the current manager
+    and then renders the data to a table based on the cuurent page and length of the data
+    */
     try {
       const response = await fetch('http://localhost:5000/auth/manager/appoints',{
         headers:{
@@ -60,17 +67,29 @@
         credentials:"include",
       });
       const data = await response.json();
-      //console.log(data);
-      renderTable(data);
+      const dataLength = data.length;
+            let n = 1;
+            for (let i = 0; i < dataLength; i += 10) {
+              const page = document.createElement('button');
+              page.classList.add('bg-green-700','p-3','rounded-lg','mr-1','border','text-lg','border-gray-800');
+              page.innerHTML = n;
+              page.onclick = () => {
+                renderTable(data, i, i + 10);
+              }
+              pageDiv.appendChild(page);
+              n++;
+            }
+
+            renderTable(data, 0, 10);
     }catch (error){
       console.error('Error',error);
     }
-  })();
-      function renderTable(data){
+  }
+  function renderTable(data,r,l){
         const tableBody = document.querySelector('#appointmentTable');
         tableBody.innerHTML = '';
         if (data && data.length >0){
-        data.slice(0, 10).forEach(row => {
+        data.slice(r, l).forEach(row => {
           const newRow = document.createElement('tr');
           newRow.innerHTML = `
               <td class ="hidden">${row.ID}</td>
@@ -88,6 +107,8 @@
       });
     }
   }
+  
+  // event handler for accepting and declining an appointment
   const appTable = document.getElementById('appointmentTable');
   appTable.addEventListener('click',(e)=>{
     if(e.target.classList.contains('approveIco')){
