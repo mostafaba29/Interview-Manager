@@ -6,6 +6,7 @@
   <title>Home Page</title>
   <!--<link rel="stylesheet" href="styles/employeeHomeStyle.css">-->
   <link rel="stylesheet" href="styles/GlobalStyle.css">
+  <script src="https://kit.fontawesome.com/724244f32d.js" crossorigin="anonymous"></script>
 </head>
 <body class=" font-arial bg-slate-300  my-0 p-0 ">
 
@@ -53,6 +54,7 @@
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Time</th>
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Name</th>
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Reason for Meeting</th>
+          <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Action</th>
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Status</th>
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Manager</th>
         </tr>
@@ -87,18 +89,81 @@
         const tableBody = document.querySelector('#appointmentTable');
         tableBody.innerHTML = '';
         if (data && data.length >0){
-        data.slice(0, 10).forEach(row => {
+        data.slice(0, 20).forEach(row => {
           const newRow = document.createElement('tr');
           newRow.innerHTML = `
               <td>${row.meeting_time}</td>
               <td>${row.client}</td>
               <td>${row.description}</td>
+              <td class="flex justify-center items-center">
+                <i class="editIco hover:text-green-500 fa-solid fa-pen-to-square fa-2xl" onclick="editAppointment('${row.ID}','${row.meeting_time}','${row.description}')"></i>
+              </td>
               <td>${row.status}</td>
               <td>${row.manager_name}</td>
           `;
           tableBody.appendChild(newRow);
       });
     }
+  }
+  function editAppointment(id,meeting_time,description){
+    const formContainer = document.createElement('div');
+    formContainer.id ='formContainer';
+    formContainer.classList.add('flex','fixed','top-0','left-0','w-full','h-full','items-center','justify-center','z-50');
+    const formContent = document.createElement('div');
+    formContent.classList.add('bg-white','p-8','rounded','shadow-md');
+    formContent.innerHTML=`
+    <h2 class="text-2xl font-bold mb-4">Edit Appointment</h2>
+          <form id="editAppointmentForm">
+            <label for="timeInput" class="block mb-2">Time:</label>
+            <input defultValue="${meeting_time}" type="time" id="timeInput" name="time" class="w-full border p-2 mb-4">
+            <label for="reasonInput" class="block mb-2">Reason:</label>
+            <textarea defaultValue="${description}" id="reasonInput" name="reason" rows="4" class="w-full border p-2 mb-4"></textarea>
+            <div class="flex justify-end">
+              <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Ok</button>
+              <button type="button" class="bg-red-500" text-white px-4 py-2 rounded hover:bg-red-600">Cancel</button>
+            </div>
+          </form>
+    `;
+    formContainer.appendChild(formContent);
+    document.body.appendChild(formContainer);
+    const editAppointmentForm = document.getElementById('editAppointmentForm');
+    const cancelBtn = formContainer.querySelector('button[type="button"]');
+    cancelBtn.addEventListener('click', function() {
+      formContainer.remove();
+    })
+    editAppointmentForm.addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const formData = new FormData(editAppointmentForm);
+      const time=formData.get('time');
+      const reason=formData.get('reason');
+      let appointmentData = {
+        meeting_time:time,
+        description:reason
+      }
+      fetch('http://localhost:5000/auth/editappointment'+id,{
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(appointmentData),
+        credentials:"include",
+      })
+        .then(response => response.json())
+        .then(data =>{
+          console.log(data);
+        })
+        .catch(error => {
+          console.error('Error during edit:', error);
+        })
+        formContainer.remove();
+        try {
+            const response = await fetch('http://localhost:5000/auth/allappointments');
+            const data = await response.json();
+            renderTable(data);
+          } catch (error) {
+            console.error('Error during refreshing the page:', error);
+        }
+    })
   }
 </script>
 </body>

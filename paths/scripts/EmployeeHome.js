@@ -42,13 +42,20 @@ subBtn.addEventListener('click',()=>{
             <label for="managerName" class="block mb-2">Manager Name:</label>
             <input type="text" id ="managerName" name="managerName" class="w-full border p-2 mb-4">
             <!-- Submit button -->
-            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Submit</button>
+            <div class="flex justify-end">
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Submit</button>
+            <button type="button" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">cancel</button>
+            </div>
           </form>
     `;
     formContainer.appendChild(formContent);
     document.body.appendChild(formContainer);
     //formContainer.classList.remove()
     const createAppointmentForm = document.getElementById("createAppointmentForm");
+    const cancelBtn = formContainer.querySelector('button[type="button"]');
+    cancelBtn.addEventListener('click', function() {
+      formContainer.remove();
+    })
         createAppointmentForm.addEventListener("submit", async function (event) {
           event.preventDefault();
           const formData = new FormData(createAppointmentForm);
@@ -88,10 +95,10 @@ subBtn.addEventListener('click',()=>{
           }
         });
     })
-    function renderTable(data){
+    /*function renderTable(data){
         const tableBody = document.querySelector('#appointmentTable');
         tableBody.innerHTML = '';
-        if (data && data.length >0){
+        if (data && data.length > 0){
         data.slice(0, 20).forEach(row => {
           const newRow = document.createElement('tr');
           newRow.innerHTML = `
@@ -104,7 +111,7 @@ subBtn.addEventListener('click',()=>{
           tableBody.appendChild(newRow);
       });
     }
-  }
+  }*/
 /*CreateAppointment.addEventListener('click', ()=>{
     let appointmentTable = document.getElementById('appointmentTable');
     let nRow = document.createElement('tr');
