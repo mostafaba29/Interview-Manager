@@ -81,9 +81,5 @@ func UpdateAppointment(c *fiber.Ctx) error {
 	oldAppointment.MeetingTime = updatedAppointment.MeetingTime
 	//intialization.DB.Save(&oldAppointment)
 
-	return c.Status(200).JSON(fiber.Map{
-		"massege":  "appointment updated",
-		"new_time": updatedAppointment,
-	})
-
+	return c.Status(200).JSON(oldAppointment)
 }
