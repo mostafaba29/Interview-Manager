@@ -45,7 +45,6 @@ func Approve(c *fiber.Ctx) error {
 	}
 
 	intialization.DB.Model(&models.Appointment{}).Where("id = ?", c.Params("id")).Update("status", "Confirmed")
-	//intialization.DB.Save(&appointment)
 	return c.JSON(appointment)
 }
 
@@ -58,28 +57,27 @@ func CancelAppointment(c *fiber.Ctx) error {
 		})
 	}
 	intialization.DB.Model(&models.Appointment{}).Where("id = ?", appointmentID).Update("status", "Declined")
-	//intialization.DB.Save(&canceledAppointment)
 	return c.Status(200).JSON(canceledAppointment)
 }
 
 func UpdateAppointment(c *fiber.Ctx) error {
 
-	var oldAppointment models.Appointment
-	oldAppointmentID := c.Params("id")
-	if err := intialization.DB.First(&oldAppointment, oldAppointmentID).Error; err != nil {
+	var UpdatedAppointment models.Appointment
+	UpdatedAppointmentID := c.Params("id")
+	if err := intialization.DB.First(&UpdatedAppointment, UpdatedAppointmentID).Error; err != nil {
 		return c.Status(http.StatusNotFound).JSON(fiber.Map{
 			"massege": "appointment not found",
 		})
 	}
-	var updatedAppointment models.Appointment
-	if err := c.BodyParser(&updatedAppointment); err != nil {
+	var NewAppointment models.Appointment
+	if err := c.BodyParser(&NewAppointment); err != nil {
 		c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"error": "could not update appointment",
 		})
 	}
-	oldAppointment.Description = updatedAppointment.Description
-	oldAppointment.MeetingTime = updatedAppointment.MeetingTime
-	intialization.DB.Save(&oldAppointment)
+	UpdatedAppointment.Description = NewAppointment.Description
+	UpdatedAppointment.MeetingTime = NewAppointment.MeetingTime
+	intialization.DB.Save(&UpdatedAppointment)
 
-	return c.Status(200).JSON(oldAppointment)
+	return c.Status(200).JSON(UpdatedAppointment)
 }
