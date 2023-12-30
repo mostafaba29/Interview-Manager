@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home Page</title>
-  <!--<link rel="stylesheet" href="styles/managerHomeStyle.css">-->
   <link rel="stylesheet" href="styles/GlobalStyle.css">
   <script src="https://kit.fontawesome.com/724244f32d.js" crossorigin="anonymous"></script>
 </head>
@@ -24,11 +23,11 @@
     </div>
   </div>
   <div class="actions">
-    <!--<button class ="bg-green-500 text-white border-none px-4 py-2 rounded mr-2 cursor-pointer hover:bg-green-600">Show Faxes</button>-->
+    <button class ="bg-green-500 text-white border-none px-4 py-2 rounded mr-2 cursor-pointer hover:bg-green-600" onclick="showAppointments()">Show appointments</button>
     <button class ="bg-red-600 text-white border-none px-4 py-2 rounded mr-2 cursor-pointer hover:bg-red-500" id ="logoutBtn">Log out</button>
   </div>
   <div class="meeting-table">
-    <table class="w-full border-collapse border-t border-b mt-20">
+    <table class="w-full border-collapse border-t border-b mt-20 border-green-500 rounded">
       <thead>
         <tr>
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Time</th>
@@ -39,25 +38,19 @@
         </tr>
       </thead>
       <tbody id="appointmentTable">
-          <!--<td>7pm</td>
-          <td>abdo</td> 
-          <td>reason</td>
-          <td class="flex justify-between">
-          <a href="#"><i class="fa-solid fa-check fa-xl"></i></a>
-          <a href="#"><i class="fa-solid fa-xmark fa-xl"></i></a>
-          <a href="#"><i class="fa-solid fa-pen-to-square fa-xl"></i></a>
-          </td>
-          <td>approved</td>-->
       </tbody>
     </table>
   </div>
 </div>
 <script src="scripts/ManagerHome.js"></script>
 <script>
+  // getting the username and postion and displaying it on the page
   const username = localStorage.getItem('user');
   const pos = localStorage.getItem('position');
   document.getElementById('username').innerHTML=username;
   document.getElementById('position').innerHTML=pos;
+
+
   (async ()=>{
     try {
       const response = await fetch('http://localhost:5000/auth/manager/appoints',{
@@ -136,38 +129,7 @@
       })
     }
 })
-  //const editBtn = document.getElementById('edit');
-
-
- /* editBtn.addEventListener('click',()=>{
-    const formContainer = document.createElement('div');
-    formContainer.id ='formContainer';
-    formContainer.classList.add('flex','fixed','top-0','left-0','w-full','h-full','items-center','justify-center','z-50');
-    const formContent = document.createElement('div');
-    formContent.classList.add('bg-white','p-8','rounded','shadow-md');
-    formContent.innerHTML=`
-    <h2 class="text-2xl font-bold mb-4">Edit Appointment</h2>
-          <form id="editAppointmentForm">
-            <label for="timeInput" class="block mb-2">Time:</label>
-            <input type="time" id="timeInput" name="time" class="w-full border p-2 mb-4">
-            <label for="nameInput" class="block mb-2">Name:</label>
-            <input type="text" id="nameInput" name="name" class="w-full border p-2 mb-4">
-            <label for="reasonInput" class="block mb-2">Reason:</label>
-            <textarea id="reasonInput" name="reason" rows="4" class="w-full border p-2 mb-4"></textarea>
-            <label for="status" class="block mb-2">Status:</label>
-            <select class="w-full p-2 box-border border border-solid border-gray-300 rounded " id="status"  name="status" required >
-            <option value="" selected disabled>select a status</option>
-            <option value="approved">Approved</option>
-            <option value="declined">Declined</option>
-            <option value="onHold">On Hold</option>
-            </select>
-            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Ok</button>
-          </form>
-    `;
-    formContainer.appendChild(formContent);
-    document.body.appendChild(formContainer);
-    //edit fetch request
-  })*/
+ 
 </script>
 </body>
 </html>

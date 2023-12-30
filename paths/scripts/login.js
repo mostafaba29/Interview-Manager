@@ -1,9 +1,9 @@
-//const position = document.getElementById('position')
+//getting the elements for input and login button
 const loginBtn = document.getElementById('login');
 const userDiv = document.querySelector('#loginbox');
 const passDiv = document.querySelector('#passbox');
-//const logoutBtn = document.getElementById('logout');
 
+// event handling for login
 loginBtn.addEventListener('click',()=>{
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
@@ -52,20 +52,4 @@ loginBtn.addEventListener('click',()=>{
     })
 })
 
-
-/*logoutBtn.addEventListener('click',()=>{
-    fetch('http://localhost:8000/auth/logout',{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data =>{
-        console.log(data);
-    })
-    .catch(error => {
-        console.log('error during logout',error);
-    })
-})*/
 

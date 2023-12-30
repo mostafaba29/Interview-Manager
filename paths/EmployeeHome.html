@@ -12,24 +12,7 @@
 
 <div class="home-container bg-slate-100 max-w-screen-2xl min-h-max mx-auto mt-5 p-20 rounded-lg shadow-md ">
 
-  <!--<div id="formContainer" class="invisible flex hidden fixed top-0 left-0 w-full h-full items-center justify-center">
-    <div class="bg-white p-8 rounded shadow-md">
-      <h2 class="text-2xl font-bold mb-4">Form</h2>
-      <form id="myForm">
-        <label for="timeInput" class="block mb-2">Time:</label>
-        <input type="time" id="timeInput" name="time" class="w-full border p-2 mb-4">
   
-        <label for="nameInput" class="block mb-2">Name:</label>
-        <input type="text" id="nameInput" name="name" class="w-full border p-2 mb-4">
-  
-
-        <label for="reasonInput" class="block mb-2">Reason:</label>
-        <textarea id="reasonInput" name="reason" rows="4" class="w-full border p-2 mb-4"></textarea>
-
-        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Submit</button>
-      </form>
-    </div>
-  </div>-->
   <div class="header flex justify-between items-center mb-20">
     <div class="user-info flex items-center">
       <img src="images/user-profile.png" alt="User Image" class="user-image h-auto w-20 rounded-full mr-4 ">
@@ -44,11 +27,11 @@
   </div>
   <div class="actions">
     <button class ="bg-green-500 text-white border-none px-4 py-2 rounded mr-2 cursor-pointer hover:bg-green-600" id="Create-appointment-btn">Create Appointment</button>
-    <button class ="bg-green-500 text-white border-none px-4 py-2 rounded mr-2 cursor-pointer hover:bg-green-600">Show Faxes</button>
+    <button class ="bg-green-500 text-white border-none px-4 py-2 rounded mr-2 cursor-pointer hover:bg-green-600" onclick="fetchAppointments()">Refresh Appointments</button>
     <button class ="bg-red-600 text-white border-none px-4 py-2 rounded mr-2 cursor-pointer hover:bg-red-500" id="logoutBtn">logout</button>
   </div>
-  <div class="meeting-table ">
-    <table class="w-full border-collapse border-t border-b mt-20">
+  <div class="meeting-table">
+    <table class="w-full border-collapse border-t border-b mt-20 rounded border-green-500">
       <thead>
         <tr>
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Time</th>
@@ -62,16 +45,32 @@
       <tbody id="appointmentTable">
       </tbody>
     </table>
+    <div id="pagenation" class="flex justify-center margin-2">
+  
+    </div>
   </div>
 </div>
 
 <script src="scripts/EmployeeHome.js"></script>
 <script>
+  //geting the locally stored credentials to view on the page
   const username = localStorage.getItem('user');
   const pos = localStorage.getItem('position');
   document.getElementById('username').innerHTML=username;
   document.getElementById('position').innerHTML=pos;
-  (async ()=>{
+
+
+  //getting the pagenation divison to append created elements to it
+  const pageDiv = document.getElementById('pagenation');
+
+
+  async function fetchAppointments (){
+    /*
+    fetching all the appointments from the server 
+    and creating the pagenation buttons based on the data
+    finally assigning the click event to each button to render the appropriate data
+    and then rendering the first 10 rows by default
+    */
     try {
       const response = await fetch('http://localhost:5000/auth/allappointments',{
         headers:{
@@ -80,32 +79,59 @@
         credentials:"include",
       });
       const data = await response.json();
-      renderTable(data);
+      const dataLength = data.length;
+            let n = 1;
+            for (let i = 0; i < dataLength; i += 10) {
+              const page = document.createElement('button');
+              page.classList.add('bg-green-700','p-3','rounded-lg','mr-1','border','text-lg','border-gray-800');
+              page.innerHTML = n;
+              page.onclick = () => {
+                renderTable(data, i, i + 10);
+              }
+              pageDiv.appendChild(page);
+              n++;
+            }
+
+            renderTable(data, 0, 10);
     }catch (error){
-      console.error('Error',error);
-    }
-  })();
-      function renderTable(data){
-        const tableBody = document.querySelector('#appointmentTable');
-        tableBody.innerHTML = '';
-        if (data && data.length >0){
-        data.slice(0, 20).forEach(row => {
-          const newRow = document.createElement('tr');
-          newRow.innerHTML = `
-              <td>${row.meeting_time}</td>
-              <td>${row.client}</td>
-              <td>${row.description}</td>
-              <td class="flex justify-center items-center">
-                <i class="editIco hover:text-green-500 fa-solid fa-pen-to-square fa-2xl" onclick="editAppointment('${row.ID}','${row.meeting_time}','${row.description}')"></i>
-              </td>
-              <td>${row.status}</td>
-              <td>${row.manager_name}</td>
-          `;
-          tableBody.appendChild(newRow);
-      });
+      console.error('Error during fetching appointments',error);
     }
   }
+
+
+  function renderTable(data,r,l){
+  /*
+  function takes the data start index and end index as arguments
+  then renders the data to the table body
+  if there is no data it renders an empty table
+  */
+  const tableBody = document.querySelector('#appointmentTable');
+  tableBody.innerHTML = '';
+  if (data && data.length >0){
+    data.slice(r, l).forEach(row => {
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+    <td>${row.meeting_time}</td>
+    <td>${row.client}</td>
+    <td>${row.description}</td>
+    <td class="flex justify-center items-center">
+      <i class="editIco hover:text-green-500 fa-solid fa-pen-to-square fa-2xl p-2" onclick="editAppointment('${row.ID}','${row.meeting_time}','${row.description}')"></i>
+    </td>
+    <td>${row.status}</td>
+    <td>${row.manager_name}</td>
+    `;
+    tableBody.appendChild(newRow);
+    });
+  }
+}
+ 
+         
   function editAppointment(id,meeting_time,description){
+    /*
+    function used for editing an appointment
+    it creates a form element and takes the time and reason from the user
+    then the functions changes those on the database based on the user input
+    */    
     const formContainer = document.createElement('div');
     formContainer.id ='formContainer';
     formContainer.classList.add('flex','fixed','top-0','left-0','w-full','h-full','items-center','justify-center','z-50');
@@ -140,7 +166,7 @@
         meeting_time:time,
         description:reason
       }
-      fetch('http://localhost:5000/auth/editappointment'+id,{
+      fetch('http://localhost:5000/auth/manager/update/'+id,{
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -165,6 +191,9 @@
         }
     })
   }
+
+//calling the fetch function
+fetchAppointments();
 </script>
 </body>
 </html>

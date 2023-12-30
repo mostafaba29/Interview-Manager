@@ -1,22 +1,10 @@
-
+//getting logout,form creation and submission elements
 const logoutBtn = document.getElementById('logoutBtn');
 const subForm = document.getElementById('formContainer');
 const subBtn = document.getElementById('Create-appointment-btn')
-/*document.addEventListener("DOMContentLoaded",()=>{
-    subForm.classList.toggle('hidden');
-    subForm.classList.add('invisible');
-    subBtn.addEventListener('click',()=>{
-        subForm.classList.toggle('hidden');
-        document.body.classList.togglte('blur-sm');
-    });
-    const myForm =document.getElementById('myForm');
-    myForm.addEventListener('submit',function(event){
-        event.preventDefault();
-        subForm.classList.add('hidden');
-        document.body.classList.toggle('blur-sm');
-    })
-})*/
 
+
+//event handling for creating a new appointment
 subBtn.addEventListener('click',()=>{
     //document.body.classList.add('blur-sm');
     const formContainer = document.createElement('div');
@@ -41,11 +29,9 @@ subBtn.addEventListener('click',()=>{
             <!-- Mangar Name -->
             <label for="managerName" class="block mb-2">Manager Name:</label>
             <input type="text" id ="managerName" name="managerName" class="w-full border p-2 mb-4">
-            <!-- Submit button -->
-            <div class="flex justify-end">
+            <!-- Submit and Cancel buttons -->
             <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Submit</button>
-            <button type="button" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">cancel</button>
-            </div>
+            <button type="button" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Cancel</button>
           </form>
     `;
     formContainer.appendChild(formContent);
@@ -95,58 +81,8 @@ subBtn.addEventListener('click',()=>{
           }
         });
     })
-    /*function renderTable(data){
-        const tableBody = document.querySelector('#appointmentTable');
-        tableBody.innerHTML = '';
-        if (data && data.length > 0){
-        data.slice(0, 20).forEach(row => {
-          const newRow = document.createElement('tr');
-          newRow.innerHTML = `
-              <td>${row.meeting_time}</td>
-              <td>${row.client}</td>
-              <td>${row.description}</td>
-              <td>${row.status}</td>
-              <td>${row.manager_name}</td>
-          `;
-          tableBody.appendChild(newRow);
-      });
-    }
-  }*/
-/*CreateAppointment.addEventListener('click', ()=>{
-    let appointmentTable = document.getElementById('appointmentTable');
-    let nRow = document.createElement('tr');
-    appointmentTable.appendChild(nRow);
-    for(let i=0;i<4;i++){
-        x = document.createElement('td');
-        x.textContent = prompt('typesomeinput','defaultValue');
-        nRow.appendChild(x)
-    }
-    let cells = nRow.getElementsByTagName('td');
 
-    let data = {
-        Meeting_Time:cells[0].textContent,
-        Client:cells[1].textContent,
-        Description:cells[2].textContent,
-        Manager_Name:cells[3].textContent
-    };
-
-    fetch('http://localhost:3000/auth/create',{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data), 
-    })
-    .then(response => response.json())
-    .then(data =>{
-        console.log(data);
-    })
-    .catch(error => {
-        console.log('error creating appointment',error);
-    })
-
-})*/
-
+//event handling for logout button
 logoutBtn.addEventListener('click',()=>{
     fetch('http://localhost:5000/auth/logout',{
         method: 'POST',

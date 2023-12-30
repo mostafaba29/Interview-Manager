@@ -1,7 +1,9 @@
-//const position = document.getElementById('position')
+//getting input and signup button
 const signupBtn = document.getElementById('signup');
 const userDiv = document.getElementById('userbox');
 const passDiv = document.getElementById('passbox')
+
+//event handling for signup
 signupBtn.addEventListener('click',()=>{
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
