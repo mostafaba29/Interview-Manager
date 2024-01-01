@@ -25,17 +25,18 @@
   </div>
   <div class="actions">
     <button class ="bg-green-500 text-white border-none px-4 py-2 rounded mr-2 cursor-pointer hover:bg-green-600" onclick="showAppointments()">Show appointments</button>
+    <button class ="bg-green-500 text-white border-none px-4 py-2 rounded mr-2 cursor-pointer green:bg-blue-600" onclick="filtered=false;showAppointments()">clear filters</button>
     <button class ="bg-red-600 text-white border-none px-4 py-2 rounded mr-2 cursor-pointer hover:bg-red-500" id ="logoutBtn">Log out</button>
   </div>
   <div class="meeting-table">
     <table class="w-full border-collapse border-t border-b mt-20 border-green-500 rounded">
       <thead>
         <tr>
-          <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Time</th>
-          <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Name</th>
+          <th id = "meeting_time" class="relative border border-gray-300 p-3 text-left bg-green-500 text-white cursor-pointer" onclick="getFilterValue()">Time</th>
+          <th id = "client" class="relative border border-gray-300 p-3 text-left bg-green-500 text-white cursor-pointer" onclick="getFilterValue()">Name</th>
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Reason for Meeting</th>
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Action</th>
-          <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Status</th>
+          <th id= "status" class="relative border border-gray-300 p-3 text-left bg-green-500 text-white cursor-pointer" onclick="getFilterValue()">Status</th>
         </tr>
       </thead>
       <tbody id="appointmentTable">
@@ -54,6 +55,9 @@
   document.getElementById('username').innerHTML=username;
   document.getElementById('position').innerHTML=pos;
 
+
+  //getting the pagenation divison to append created elements to it
+  const pageDiv = document.getElementById('pagenation');
 // fetching the appointments
   async function showAppointments(){
     /*
@@ -86,10 +90,43 @@
       console.error('Error',error);
     }
   }
-  function renderTable(data,r,l){
+
+  async function filterAppointments(colName,filterValue){
+    /*
+    the functino fetches the manager appointments from db for the current manager
+    and then renders the data to a table based on the cuurent page and length of the data
+    */
+    try {
+      const response = await fetch('http://localhost:5000/auth/manager/appoints',{
+        headers:{
+            'Content-Type': 'application/json',
+        },
+        credentials:"include",
+      });
+      const data = await response.json();
+      const dataLength = data.length;
+            let n = 1;
+            for (let i = 0; i < dataLength; i += 10) {
+              const page = document.createElement('button');
+              page.classList.add('bg-green-400','p-3','rounded-lg','mr-1','border','text-lg','border-gray-800');
+              page.innerHTML = n;
+              page.onclick = () => {
+                renderTable(data, i, i + 10);
+              }
+              pageDiv.appendChild(page);
+              n++;
+            }
+
+            renderTable(data, 0, 10,colName,filterValue);
+    }catch (error){
+      console.error('Error during filtering',error);
+    }
+  }
+  function renderTable(data,r,l,colName = "",filterValue = ""){
         const tableBody = document.querySelector('#appointmentTable');
         tableBody.innerHTML = '';
         if (data && data.length >0){
+          if(colName == 0 && filterValue == ""){
         data.slice(r, l).forEach(row => {
           const newRow = document.createElement('tr');
           newRow.innerHTML = `
@@ -100,12 +137,30 @@
               <td class="flex justify-between">
                 <i class="approveIco hover:text-green-500 fa-solid fa-check fa-2xl cursor-pointer"></i>
                 <i class="declineIco hover:text-red-500 fa-solid fa-xmark fa-2xl cursor-pointer "></i>
-                <!--<i id="edit" class="fa-solid fa-pen-to-square fa-xl"></i>-->
               </td>
               <td>${row.status}</td>
           `;
           tableBody.appendChild(newRow);
       });
+    }else{
+      data.slice(r, l).forEach(row => {
+        if(row[colName] == filterValue){
+          const newRow = document.createElement('tr');
+          newRow.innerHTML = `
+              <td class ="hidden">${row.ID}</td>
+              <td>${row.meeting_time}</td>
+              <td>${row.client}</td>
+              <td>${row.description}</td>
+              <td class="flex justify-between">
+                <i class="approveIco hover:text-green-500 fa-solid fa-check fa-2xl cursor-pointer"></i>
+                <i class="declineIco hover:text-red-500 fa-solid fa-xmark fa-2xl cursor-pointer "></i>
+              </td>
+              <td>${row.status}</td>
+          `;
+          tableBody.appendChild(newRow);
+          }
+      });
+    }
     }
   }
   
@@ -152,27 +207,71 @@
     }
 })
  
+
+function getFilterValue(){
+  const th=event.target.closest('th');
+  const promptDiv = document.createElement('div');
+  const filterI =document.createElement('input');
+  const promptLabel = document.createElement('label');
+  const x = document.createElement('i');
+  promptDiv.appendChild(promptLabel);
+  promptDiv.appendChild(filterI);
+  promptDiv.classList.add('filterPrompt');
+  promptLabel.innerHTML = "Filter by: ";
+  promptLabel.classList.add('text-black', 'font-bold', 'm-1');
+  const filterBtn = document.createElement('button');
+  filterBtn.innerHTML = "Filter";
+  filterBtn.classList.add('bg-green-600', 'text-white' ,'border-none', 'px-4', 'py-2', 'rounded', 'mr-2', 'cursor-pointer' ,'hover:bg-green-400');
+  promptDiv.appendChild(filterBtn);
+  promptDiv.appendChild(x);
+  x.classList.add('hover:text-red-500', 'fa-solid', 'fa-xmark', 'fa-2xl', 'cursor-pointer');
+  th.appendChild(promptDiv);
+  filterI.focus();
+  filterBtn.addEventListener('click',()=>{
+    const filterValue = filterI.value;
+    filterAppointments(th.id,filterValue);
+    promptDiv.remove();
+    filtered = true;
+  })
+  x.addEventListener('click',()=>{
+    promptDiv.remove();
+  })
+}
  //notification handling
 var onloadData;
 var currData;
+var filtered = false;
 document.addEventListener('DOMContentLoaded', function() {
   showAppointments()
     .then(data => onloadData = data);
+
+  setTimeout(() => {
+    showAppointments()
+    .then(data => currData = data);
+  }, 50);
 })
 //calling the fetch periodically to get any new appointments
-const intervalId = setInterval(showAppointments, 30000);
-showAppointments()
-.then(data => currData = data);
-
-//comparing the data between updates
-if (currData.length>onloadData.length){
-  sendNotification(currData.length-onloadData.length);
-  onloadData=currData;
+function manageUpdates(state){
+  if (!state){
+    const intervalId = setInterval(showAppointments, 30000);
+    if (currData.length>onloadData.length){
+    sendNotification(currData.length-onloadData.length);
+    onloadData=currData;
+    showAppointments()
+    .then(data => currData = data);
+  }
+  }else{
+    clearInterval(intervalId);
+  }
 }
+const mU = setInterval(manageUpdates, 30000);
+manageUpdates(filtered);
+//comparing the data between updates
+setTimeout(manageUpdates, 50000);
 
 //notification function
-function sendNotification(count){
-  document.getElementById('notification').innerHTML=count;
+function sendNotifications(count){
+  document.getElementById('notification-count').innerHTML=count;
 }
 
 </script>

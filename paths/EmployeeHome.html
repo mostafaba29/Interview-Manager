@@ -22,8 +22,10 @@
       </div>
     </div>
     <div class="notifications relative">
+      <!--
       <img src="images/bell-icon.png" alt="Bell Icon" class="bell-icon  w-10 h-10 cursor-pointer" onclick="sendNotifications(0)">
       <label id ="notification-count" class="absolute bottom-5 left-5 bg-red-600 text-white text-xs font-bold py-1 px-2 rounded-full">0</label>
+      -->
     </div>
   </div>
   <div class="actions">
@@ -193,28 +195,10 @@
     })
   }
 
-//notification handling
-var onloadData;
-var currData;
-document.addEventListener('DOMContentLoaded', function() {
-  fetchAppointments()
-    .then(data => onloadData = data);
-})
 //calling the fetch periodically to get any new appointments
 const intervalId = setInterval(fetchAppointments, 30000);
-fetchAppointments()
-.then(data => currData = data);
+fetchAppointments();
 
-//comparing the data between updates
-if (currData.length>onloadData.length){
-  sendNotification(currData.length-onloadData.length);
-  onloadData=currData;
-}
-
-//notification function
-function sendNotification(count){
-  document.getElementById('notification').innerHTML=count;
-}
 
 
 </script>

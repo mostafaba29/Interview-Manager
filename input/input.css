@@ -9,3 +9,16 @@
 .meeting-table tbody tr:nth-child(even) {
     @apply bg-gray-100;
 }
+
+.meeting-table th .filterPrompt{
+    @apply bg-slate-200 flex flex-col items-center justify-center absolute z-50
+ border rounded-lg border-slate-300 w-full h-36 p-4;
+}
+
+.meeting-table th .filterPrompt input{
+    @apply text-black font-bold m-1 w-full; 
+}
+
+.meeting-table th .filterPrompt i{
+    @apply absolute m-2 top-2 left-36;
+}
