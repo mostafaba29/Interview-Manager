@@ -43,7 +43,9 @@ func Signup(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(200).JSON("account created")
+	return c.Status(200).JSON(fiber.Map{
+		"message":  "account created",
+		"position": user.Position})
 }
 
 func Login(c *fiber.Ctx) error {

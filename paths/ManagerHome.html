@@ -74,9 +74,10 @@
       const data = await response.json();
       const dataLength = data.length;
             let n = 1;
+            pageDiv.innerHTML = '';
             for (let i = 0; i < dataLength; i += 10) {
               const page = document.createElement('button');
-              page.classList.add('bg-green-700','p-3','rounded-lg','mr-1','border','text-lg','border-gray-800');
+              page.classList.add('bg-slate-200','p-3','rounded-lg','mr-1','border','text-lg','border-gray-800','hover:bg-slate-500','mt-2');
               page.innerHTML = n;
               page.onclick = () => {
                 renderTable(data, i, i + 10);
@@ -134,7 +135,7 @@
               <td>${row.meeting_time}</td>
               <td>${row.client}</td>
               <td>${row.description}</td>
-              <td class="flex justify-between">
+              <td class="flex justify-between " >
                 <i class="approveIco hover:text-green-500 fa-solid fa-check fa-2xl cursor-pointer"></i>
                 <i class="declineIco hover:text-red-500 fa-solid fa-xmark fa-2xl cursor-pointer "></i>
               </td>

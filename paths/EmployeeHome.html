@@ -84,9 +84,10 @@
       const data = await response.json();
       const dataLength = data.length;
             let n = 1;
+            pageDiv.innerHTML = '';
             for (let i = 0; i < dataLength; i += 10) {
               const page = document.createElement('button');
-              page.classList.add('bg-green-700','p-3','rounded-lg','mr-1','border','text-lg','border-gray-800');
+              page.classList.add('bg-slate-200','p-3','rounded-lg','mr-1','border','text-lg','border-gray-800','hover:bg-slate-500','mt-2');
               page.innerHTML = n;
               page.onclick = () => {
                 renderTable(data, i, i + 10);
@@ -94,7 +95,6 @@
               pageDiv.appendChild(page);
               n++;
             }
-
             renderTable(data, 0, 10);
     }catch (error){
       console.error('Error during fetching appointments',error);
@@ -108,7 +108,7 @@
   then renders the data to the table body
   if there is no data it renders an empty table
   */
-  const tableBody = document.querySelector('#appointmentTable');
+  const tableBody = document.getElementById('appointmentTable');
   tableBody.innerHTML = '';
   if (data && data.length >0){
     data.slice(r, l).forEach(row => {
