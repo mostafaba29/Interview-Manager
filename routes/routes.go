@@ -19,7 +19,6 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/auth/allappointments", handlers.ShowAppointments)
 	app.Get("auth/showapporved", handlers.ShowApprovedAppointments)
 	app.Get("auth/showdeclined", handlers.ShowCanceledAppointments)
-	app.Get("auth/showbyclient", handlers.ShowClient)
 	app.Options("/*", func(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusOK)
 	})
