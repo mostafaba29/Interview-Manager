@@ -40,7 +40,7 @@
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Time</th>
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Name</th>
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Reason for Meeting</th>
-          <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Action</th>
+          <th class="border border-gray-300 p-3  bg-green-500 text-white text-center">Action</th>
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Status</th>
           <th class="border border-gray-300 p-3 text-left bg-green-500 text-white">Manager</th>
         </tr>
@@ -117,8 +117,8 @@
     <td>${row.meeting_time}</td>
     <td>${row.client}</td>
     <td>${row.description}</td>
-    <td class="flex justify-center items-center">
-      <i class="editIco hover:text-green-500 fa-solid fa-pen-to-square fa-2xl p-2" onclick="editAppointment('${row.ID}','${row.meeting_time}','${row.description}')"></i>
+    <td>
+      <i class="editIco hover:text-green-500 fa-solid fa-pen-to-square fa-2xl cursor-pointer" onclick="editAppointment('${row.ID}','${row.meeting_time}','${row.description}')"></i>
     </td>
     <td>${row.status}</td>
     <td>${row.manager_name}</td>
